@@ -14,10 +14,10 @@ baseurl: ""
 # Of course don't forget to change the username and projectname to YOUR username and project
 
 # Name of website
-title: Willem Jan's blog
+title: Willem Jan's Blog
 
 # Short description of your site
-description: Library research blog
+description: Ramblings of a library researcher
 
 # --- Navigation bar options --- #
 
@@ -88,10 +88,10 @@ url-pretty: "willemjan.github.io"  # eg. "deanattali.com/beautiful-jekyll"
 
 # --- Misc --- #
 # Fill in your Disqus shortname (NOT the userid) if you want to support Disqus comments
-# disqus: "kratzertblog"
+#disqus: ""
 
 # Fill in your Google Analytics ID to track your website using GA
-# google_analytics: "UA-96660715-1"
+#google_analytics: "UA-96660715-1"
 
 # Google Tag Manager ID
 #gtm: ""
@@ -127,8 +127,8 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-      comments: false # add comments to all blog posts
-        social-share: false # add social media sharing buttons to all blog posts
+      comments: true  # add comments to all blog posts
+      social-share: true # add social media sharing buttons to all blog posts
   -
     scope:
       path: "" # all files
