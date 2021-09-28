@@ -44,7 +44,7 @@ Sensors
 Let's start with the sensor part. There are a lot of things you can measure with sensors, ranging from simple switches to water-levels, radar sensors, CO2 sensors ect.
 
 To explore a wide range of possibilities I suggest getting a sensor-kit, something like this:
-![Sensor kit example](https://willemjan.github.io/2021/09/27/sensor-kit.jpg)
+![Sensor kit example](https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/sensor-kit.jpg)
 
 Most of these sensor have been tested with MicroPython and tutorials on howto connect and operate these are widely available, as well as source code.
 
@@ -53,7 +53,7 @@ Microcontrollers
 I've tested several devices for this purpose, and the thing I like best and is super-cheap to deploy, the ESP8266 aka as NodeMCU.
 For all expiriments I used Debian 10.10 (Buster) on my laptop and python3 to communicate with the ESP8266 microcontroller, but this can also be done from the Raspberry Pi.
 
-<img src="https://willemjan.github.io/2021/09/27/esp8266.png" align="right" alt="ESP8266 controller">
+<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/esp8266.png" align="right" alt="ESP8266 controller">
 
 According to Wikipedia: 
 
