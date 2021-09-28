@@ -64,7 +64,7 @@ At the time of writing this blog, getting one module will cost you (In the Nethe
 ```
   Cost of an ESP8266: € 2,53
   Cost of shipping:   € 1,44 +
-                        =
+                        ==== 
   Total cost:         € 3,97
 ```
 
@@ -108,7 +108,7 @@ picocom --baud 115200 /dev/ttyUSB0
 ```
 
 Using the serial connection you will be able te transfer data very reliable, but not as fast as over WiFi (2.7 mega bits/sec) according to [load tesing an esp8266](https://arunoda.me/blog/load-testing-an-esp8266).
-But for low-latency and high reliability/security stuff a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port and this works just fine.
+But for low-latency and high reliability/security stuff a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port and this works like a charm.
 
 Installing pyserial:
 ```
