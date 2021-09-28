@@ -9,7 +9,7 @@ comments: false
 IoT for libraries
 =================
 
-<img align="right" src="5424803c6bb3f78c719d91d6.jpg" alt="Cost of sensors">
+<img align="right" src="https://s3.eu-central-1.amazonaws.com/centaur-wp/econsultancy/prod/content/uploads/archive/images/resized/0008/6869/atlas_bjsmcfal_2x-blog-flyer.png" alt="Cost of sensors">
 
 **To measure or not to measure that's the question.**
 
@@ -26,7 +26,7 @@ Let's get our definition straight on what IoT devices are. I'm a fan of Wikipedi
 
 > The Internet of Things (IoT) describes physical objects (or groups of such objects), that are embedded with sensors, processing ability, software, and other technologies, and that connect and exchange data with other devices and systems over the Internet or other communications networks.
 
-There are a lot of good resources on the net about how-to setup your own IoT landscape. My weapon of choice for setting thins up is Python. There is a Python distribution available especially for playing with these devices, MicroPython. I highly recommend this book:  
+There are a lot of good resources on the net about how-to setup your own IoT landscape. My weapon of choice for setting thins up is Python. There is a Python distribution available especially for playing with these devices, MicroPython. I highly recommend this book:
 
 - Programming with MicroPython,
 - Embedded programming with microcontrollers & Python
@@ -34,7 +34,7 @@ There are a lot of good resources on the net about how-to setup your own IoT lan
 - ISBN: 978-1-491-97273-1
 
 Now that we've defined our programming language let's talk hardware, how should you setup your IoT landscape.
-The general idea here is this:  
+The general idea here is this:
 
 Sensor -> Microcontroller -> Raspberry Pi
 
@@ -77,7 +77,7 @@ I've explored Option 1 and Option 2 in depth, and will share my experience here.
 
 The first step is to erase and flash new firmware onto the ESP8266 device.
 
-First install the required tools and firmware:  
+First install the required tools and firmware:
 ```
 sudo apt install -y picocom esptool 
 pip3 install adafruit-ampy
@@ -90,7 +90,7 @@ curl -s https://raw.githubusercontent.com/micropython/micropython-lib/master/mic
 Note that esptool may be outdated, if you get wierd errors during invocation, use 'sudo apt remove -y esptool; sudo pip3 install esptool'
 More info on the [firmware](http://micropython.org/download/esp8266/).
 
-This is my little flash & disaster recovery script:  
+This is my little flash & disaster recovery script:
 ```
 #!/usr/bin/env bash
 
@@ -109,12 +109,12 @@ picocom --baud 115200 /dev/ttyUSB0
 Using the serial connection you will be able te transfer data very reliable, but not as fast as over WiFi (2.7 mega bits/sec) according to [load tesing an esp8266](https://arunoda.me/blog/load-testing-an-esp8266).
 But for low-latency and high reliability/security stuff a serial connection works just fine, I've tested the Python library 'pyserial' to get reading directly from the USB-port and this works just fine.
 
-Installing pyserial:  
+Installing pyserial:
 ```
 sudo pip3 install pyserial
 ```
 
-Code for serial communication with the ESP8266:  
+Code for serial communication with the ESP8266:
 ```
 #!/usr/bin/env python3
 
