@@ -9,7 +9,6 @@ comments: false
 IoT for libraries
 =================
 
-<img align="right" src="https://s3.eu-central-1.amazonaws.com/centaur-wp/econsultancy/prod/content/uploads/archive/images/resized/0008/6869/atlas_bjsmcfal_2x-blog-flyer.png" alt="Cost of sensors">
 
 **To measure or not to measure that's the question.**
 
@@ -17,6 +16,8 @@ Overview
 --------
 
 As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding of howto deploy these. The IoT landscape is riddled with commercial companies that want to gather as much data as they can, while I think that a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well. Since I am a hand's on type of person I want to share some experiments I did, and talk about cost effectiveness of these kind of devices and howto wire them up. I did all experiments during the COVID-lockdown period, so no book-lovers where harmed in the process.
+
+<img src="https://s3.eu-central-1.amazonaws.com/centaur-wp/econsultancy/prod/content/uploads/archive/images/resized/0008/6869/atlas_bjsmcfal_2x-blog-flyer.png" alt="Cost of sensors">
 
 A good article about other experiments done inside an actual library appeared in code4lib Issue 38, 2017-10-18.
 
@@ -43,7 +44,7 @@ Sensors
 Let's start with the sensor part. There are a lot of things you can measure with sensors, ranging from simple switches to water-levels, radar sensors, CO2 sensors ect.
 
 To explore a wide range of possibilities I suggest getting a sensor-kit, something like this:
-![Sensor kit example](sensor-kit.jpg)
+![Sensor kit example](https://willemjan.github.io/2021/09/27/sensor-kit.jpg)
 
 Most of these sensor have been tested with MicroPython and tutorials on howto connect and operate these are widely available, as well as source code.
 
@@ -52,7 +53,7 @@ Microcontrollers
 I've tested several devices for this purpose, and the thing I like best and is super-cheap to deploy, the ESP8266 aka as NodeMCU.
 For all expiriments I used Debian 10.10 (Buster) on my laptop and python3 to communicate with the ESP8266 microcontroller, but this can also be done from the Raspberry Pi.
 
-<img src="esp8266.png" align="right" alt="ESP8266 controller">
+<img src="https://willemjan.github.io/2021/09/27/esp8266.png" align="right" alt="ESP8266 controller">
 
 According to Wikipedia: 
 
