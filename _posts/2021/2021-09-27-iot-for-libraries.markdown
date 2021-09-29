@@ -14,7 +14,7 @@ IoT for libraries
 Overview
 --------
 
-As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding of howto deploy these. The Internet of Things(IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think that a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
+As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding of howto deploy these. The Internet of Things (IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think that a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
 During lockdown I had time to experiment with a lot of IoT devices, and I will share my IoT-setup here.
 
 <img src="https://s3.eu-central-1.amazonaws.com/centaur-wp/econsultancy/prod/content/uploads/archive/images/resized/0008/6869/atlas_bjsmcfal_2x-blog-flyer.png" alt="Cost of sensors">
@@ -44,7 +44,6 @@ For the home user a lot of stuff sold as IoT works out of the box, setup-procedu
 
 Let's get technical
 -------------------
-
 There are a lot of good resources on the Internet about how-to setup your own IoT landscape, so making the right choices is important.
 My weapon of choice for setting thins up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/) or howto hookup the cloud.
 
@@ -70,8 +69,10 @@ Let's start with the sensor part. There are a lot of things you can measure with
 
 To explore a wide range of possibilities I suggest getting a sensor-kit, something like this:
 ![Sensor kit example](https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/sensor-kit.jpg)
+The average cost of these kind of kits are about € 15,-.
 
-Most of these sensor have been tested with MicroPython and tutorials on howto connect and operate these are widely available, as well as source code.
+Most of these sensor have been tested with MicroPython and tutorials on howto connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/)
+
 
 Microcontrollers
 ----------------
@@ -103,15 +104,17 @@ I've explored Option 1 and Option 2 in depth, and will share my experience here.
 
 The first step is to erase and flash new firmware onto the ESP8266 device.
 
-First install the required tools and firmware:
+First install the required tools, firmware and create an initial empty boot.py file.
 ```
 sudo apt install -y picocom esptool 
 pip3 install adafruit-ampy
 mkdir esp_8266
+cd esp_8266
 touch boot.py # For now make an empty boot.py, later you can fill this with code to read and transmit sensor data.
 wget 'http://micropython.org/resources/firmware/esp8266-20210902-v1.17.bin'
 curl -s https://raw.githubusercontent.com/micropython/micropython-lib/master/micropython/urllib.urequest/urllib/urequest.py > ureq.py
 ```
+Once the microcontroller boots, it will execute the boot.py file. In this file we will put the logic needed to read data from the attached sensors.
 
 Note that esptool may be outdated, if you get weird errors during invocation, use:
 ```
@@ -156,9 +159,12 @@ while True:
     print(ser.readline().decode("utf-8").strip())
 ```
 
-Please note the port, which by default will be '/dev/ttyUSB0' under Debian, it might be different on your OS, if unsure check the output of 'sudo dmesg'
+Please note the port, which by default will be '/dev/ttyUSB0' under Debian, it might be different on your OS, if unsure check the output of:
+```
+sudo dmesg
+```
 
-By default the ESP8266 turns on a Wifi-AP, if you use a serial connection it's wise to turn this off completely using the following code:
+By default the ESP8266 turns on a Wifi-AP, if you use a serial connection it's wise to turn this off completely using the following code: (You can add this to the boot.py file using your favorite editor.)
 ```
 import network
 sta_if = network.WLAN(network.STA_IF)
