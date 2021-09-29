@@ -61,7 +61,7 @@ Now that we've defined our programming language let's talk hardware, and how you
 
 The general idea here is this:
 
-Sensor -> Microcontroller -> Raspberry Pi
+Sensor -> Microcontroller -> Raspberry PI
 
 Sensors
 -------
@@ -79,7 +79,7 @@ In order to attach te sensors to a ESP8266 you will need some wire, I recommend 
 Microcontrollers
 ----------------
 I've tested several devices for this purpose, and the thing I like best and is super-cheap to deploy, the ESP8266 aka as NodeMCU.
-For all experiments I used Debian 10.10 (Buster) on my laptop and python3 to communicate with the ESP8266 microcontroller, but this can also be done from the Raspberry Pi.
+For all experiments I used Debian 10.10 (Buster) on my laptop and python3 to communicate with the ESP8266 microcontroller, but this can also be done from the Raspberry PI.
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/esp8266.png" alt="ESP8266 controller">
 
@@ -166,7 +166,7 @@ Please note the port, which by default will be '/dev/ttyUSB0' under Debian, it m
 sudo dmesg
 ```
 
-By default the ESP8266 turns on a Wifi-AP, if you use a serial connection it's wise to turn this off completely using the following code: (You can add this to the boot.py file using your favorite editor.)
+By default the ESP8266 turns on a Wi-Fi Access Point, if you use a serial connection it's wise to turn this off completely using the following code: (You can add this to the boot.py file using your favorite editor.)
 ```
 import network
 sta_if = network.WLAN(network.STA_IF)
@@ -174,21 +174,19 @@ sta_if.active(False)
 ap_if = network.WLAN(network.AP_IF)
 ap_if.active(False)
 ```
+An access point is normaly used to connect to, you can do nice things with this option, like update the firmware 
 
-I prefer to let the ESP8266 send data, rather then having the Raspberry Pi poll all the ESP8266's deployed, so I recommend turning off the access point (Which will by default show up something like 'MicroPython-2884894' in your Wi-Fi network list).
+I prefer to let the ESP8266 send data, rather then having the Raspberry PI poll all the ESP8266's deployed, so I recommend turning off the access point (Which will by default show up something like 'MicroPython-2884894' in your Wi-Fi network list).
 In order to do this, the last 2 lines of the code-snippet above will have to run first, before starting the main loop, add them to the boot.py file.
 
-Raspberry Pi
+Raspberry PI
 ------------
-The Raspberry Pi acts as the IoT Wi-Fi endpoint in this setup, and can be used to power the microcontrollers via USB Cable (A Male to Micro B Female).
-As for power, I recommend the following setup:
+As for powering the IoT setup, I recommend the following:
 
-POE-switch -> Ethernet converter -> Raspberry PI -> ESP8266.
+220v -> POE-switch -> Ethernet converter -> Raspberry PI -> ESP8266 -> Sensors.
 
-For my test-setup I've used a Netgear ProSAFE GS108OE (€ 89,95) as Power Over Ethernet (POE)-switch, and a Raspberry PI 3 as the IoT-gateway. A gateway acts as a central point where all the information gathered from the IoT devices is sent. From this point you are able to make graphs and generate real-time dashboards of the deployed sensors. Cheap converter's to convert the POE power and split the ethernet signal are available for about (€ 8,-).
-The POE-splitter is the final component you will need to have a nice modular IoT-setup to experiment with, and at least one Ethernet-cable.
+For my test setup I've used a Netgear ProSAFE GS108OE (€ 89,95) as Power Over Ethernet (POE)-switch to power the Raspberry PI, the Raspberry PI will in it's turn power the ESP8266 microcontroller, and the ESP8266 will power the sensors.
+The final components, a network-cable and a POE-splitter will split power and ethernet signal needed to power up the Raspberry, they are available for about (€ 8,-).
 
 The final setup will look something like this:
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/iot_setup.JPG" alt="Final IoT setup" width=800px>
-
-
