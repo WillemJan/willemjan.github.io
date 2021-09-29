@@ -14,7 +14,7 @@ IoT for libraries
 Overview
 --------
 
-As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding of howto deploy these. The Internet of Things (IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think that a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
+As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how to deploy these. The Internet of Things (IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think that a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
 During lockdown I had time to experiment with a lot of IoT devices, and I will share my IoT-setup here.
 
 <img src="https://s3.eu-central-1.amazonaws.com/centaur-wp/econsultancy/prod/content/uploads/archive/images/resized/0008/6869/atlas_bjsmcfal_2x-blog-flyer.png" alt="Cost of sensors">
@@ -45,7 +45,7 @@ For the home user a lot of stuff sold as IoT works out of the box, setup-procedu
 Let's get technical
 -------------------
 There are a lot of good resources on the Internet about how-to setup your own IoT landscape, so making the right choices is important.
-My weapon of choice for setting thins up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/) or howto hookup the cloud.
+My weapon of choice for setting thins up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/) or how to hookup IoT to the cloud.
 
 Last warning, this a very DIY!
 
@@ -71,9 +71,9 @@ To explore a wide range of possibilities I suggest getting a sensor-kit, somethi
 ![Sensor kit example](https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/sensor-kit.jpg)
 The average cost of these kind of kits are about € 15,-.
 
-Most of these sensor have been tested with MicroPython and tutorials on howto connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/)
+Most of these sensor have been tested with MicroPython and tutorials on how to connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
 
-In order to attach te sensors to a ESP8266 you will need some wire, I recommend getting some dupont wire (Female to Female) should cost about (€ 5,-)
+In order to attach te sensors to a ESP8266 you will need some wire, I recommend getting some dupont wire (Female to Female) should cost about (€ 5,-).
 
 
 Microcontrollers
@@ -185,5 +185,10 @@ As for power, I recommend the following setup:
 
 POE-switch -> Ethernet converter -> Raspberry PI -> ESP8266.
 
-For my test-setup I've used a Netgear ProSAFE GS108OE (€ 89,95) as Power Over Ethernet (POE)-switch, and a Raspberry PI 3 as the IoT-gateway. A gateway acts as a central point where all the information gathered from the IoT devices is sent. From this point you are able to make graphs and generate real-time dashboards of the deployed sensors.
+For my test-setup I've used a Netgear ProSAFE GS108OE (€ 89,95) as Power Over Ethernet (POE)-switch, and a Raspberry PI 3 as the IoT-gateway. A gateway acts as a central point where all the information gathered from the IoT devices is sent. From this point you are able to make graphs and generate real-time dashboards of the deployed sensors. Cheap converter's to convert the POE power and split the ethernet signal are available for about (€ 8,-).
+The POE-splitter is the final component you will need to have a nice modular IoT-setup to experiment with, and at least one Ethernet-cable.
+
+The final setup will look something like this:
+<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/iot_setup.JPG" alt="Final IoT setup" width=600px>
+
 
