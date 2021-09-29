@@ -186,8 +186,7 @@ The final components, a network-cable and a POE-splitter will split power and et
 
 So the power will flow like this:
 
-220v -> POE-switch -> POE-splitter -> Raspberry PI -> ESP8266 -> Sensors.
+220v -> POE-switch -> Network cable -> POE-splitter -> Raspberry PI -> USB micro cable -> ESP8266 -> DuPont wire -> Sensors.
 
-
-The final setup will look something like:
+The final setup will look something like the image shown below:
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/iot_setup.JPG" alt="Final IoT setup" width=800px>
