@@ -22,7 +22,7 @@ During lockdown I had time to experiment with a lot of IoT devices, and I will s
 What's in it for me
 -------------------
 
-Wheather your a teacher a librarian or a hacker, in this article I will try to show you how sensors could be deployed in your environment.  
+Whether your a teacher a librarian or a hacker, in this article I will try to show you how sensors could be deployed in your environment.  
 I will show some examples of real-world scenario's aka IoT in the wild, as well as a prototype of an interactive bookshelf I've been working on.  
 If you don't have a technical background, some parts of this blog might be hard to understand, I suggest you skip all code parts, and read it anyway to get a little understanding of what all the buzz about Internet of Things is all about.
 Since the cost of the devices that are at the core of this revolution (microcontrollers) are now dirt-cheap, it's hard to get devices without them, yes, even your toothbrush will be equipped with these kind of technologies.
@@ -36,16 +36,17 @@ Let's start with the definition IoT devices are. I'm a fan of Wikipedia so here 
 
 > The Internet of Things (IoT) describes physical objects (or groups of such objects), that are embedded with sensors, processing ability, software, and other technologies, and that connect and exchange data with other devices and systems over the Internet or other communications networks.
 
-To further nannow down what this blog is about, the IoT industry is huge, there are roughly two top classes by wich to divide the IoT world in, IIot and Iot. The extra I in IIot comes from Industry, in this domain the equpment used is more robust, accurate and secure then the equpment used at home. During my edudaction I was exposed to te IIoT side of things, back then these where not even called IoT devices but Programmable Logic Controllers(PLC's). The equipment we used in class was goes by the name of [Adam](https://www.advantech.com/products/modular-i-o-system-adam-5000-series/sub_7a806b75-2b4f-4a04-ae12-270d79a9a6cd). The idea's behind PLC's kindof evolved into IIoT, as these techniques where the driver behind the the third industrial revolution. Mayor companies like Siemens now brand their product as [IIOT](https://siemens.mindsphere.io/en/industrial-iot).
-For the home user a lot of stuff sold as IoT works out of the box, setup-procedures are super simple, mostly the device want's to somehow get access to the Internet so you must give it access to your WiFi-network, and batta bing your device works. In this blog I will try to explain in detail how this works (Without sending your data to 3rd-parties), and how you can create your own IoT setup.
+To further narrow down what this blog is about, the IoT industry is huge, there are roughly two top classes by which to divide the IoT world in, IIot and Iot. The extra I in IIot comes from Industry, in this domain the equipment used is more robust, accurate and secure then the equipment used at home. During my education I was exposed to the IIoT side of things, back then these where not even called IoT devices but Programmable Logic Controllers(PLC's). The equipment we used in class was goes by the name of [Adam](https://www.advantech.com/products/modular-i-o-system-adam-5000-series/sub_7a806b75-2b4f-4a04-ae12-270d79a9a6cd). The idea's behind PLC's kindof evolved into IIoT, as these techniques where the driver behind the the third industrial revolution. Mayor companies like Siemens now brand their product as [IIOT](https://siemens.mindsphere.io/en/industrial-iot).
+For the home user a lot of stuff sold as IoT works out of the box, setup-procedures are super simple, mostly the device want's to somehow get access to the Internet so you must give it access to your Wi-Fi network, and batta bing your device works. In this blog I will try to explain in detail how this works (Without sending your data to 3rd-parties), and how you can create your own IoT setup.
 
 
 Let's get technical
 -------------------
 
-There are a lot of good resources on the Internet about how-to setup your own IoT landscape.
-My weapon of choice for setting thins up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects.  
-So here is my warning, this a very DIY.
+There are a lot of good resources on the Internet about how-to setup your own IoT landscape, so making the right choices is important.
+My weapon of choice for setting thins up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/) or howto hookup the cloud.
+
+Last warning, this a very DIY!
 
 For microcontrollers there is a special Python distribution available for playing with these devices, MicroPython.
 I highly recommend this book:
@@ -93,7 +94,7 @@ At the time of writing this blog, getting one module will cost you (In the Nethe
 There are several ways of communicating with the chip, once deployed.
 
 - Option 1) Via serial communication using the USB-connection.
-- Option 2) Via WiFi.
+- Option 2) Via Wi-Fi.
 - Option 3) By other means, like the SPI bus or using a cheap GMS module.
 
 I've explored Option 1 and Option 2 in depth, and will share my experience here.
@@ -134,7 +135,7 @@ picocom --baud 115200 /dev/ttyUSB0
 ```
 Whenever you can't get readings from your ESP8266, don't hesitate to flash it again.
 
-Using the serial connection you will be able te transfer data very reliable, but not as fast as over WiFi (2.7 mega bits/sec) according to this [load tesing an esp8266](https://arunoda.me/blog/load-testing-an-esp8266).
+Using the serial connection you will be able te transfer data very reliable, but not as fast as over Wi-Fi (2.7 mega bits/sec) according to this [load tesing an esp8266](https://arunoda.me/blog/load-testing-an-esp8266).
 But for low-latency and high reliability/security stuff a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port and this works like a charm.
 
 Installing pyserial:
@@ -164,7 +165,7 @@ ap_if = network.WLAN(network.AP_IF)
 ap_if.active(False)
 ```
 
-I prefer to let the ESP8266 send data, rather then having the Raspberry Pi poll all the ESP8266's deployed, so I recommend turning off the access point (Which will by default show up something like 'MicroPython-2884894' in your WiFi-network list).
+I prefer to let the ESP8266 send data, rather then having the Raspberry Pi poll all the ESP8266's deployed, so I recommend turning off the access point (Which will by default show up something like 'MicroPython-2884894' in your Wi-Fi network list).
 In order to do this, the last 2 lines of the code-snippet above will have to run first, before starting the main loop, add them to the boot.py file.
 
 Raspberry Pi
@@ -172,7 +173,7 @@ Raspberry Pi
 The Raspberry Pi acts as the IoT-gateway in this setup, and can be used to power the microcontrollers via USB Cable (A Male to Micro B Female).
 As for power, I recommend the following setup:
 
-POE-switch -> Ethernet convertor -> Raspberry PI -> ESP8266.
+POE-switch -> Ethernet converter -> Raspberry PI -> ESP8266.
 
 For my test-setup I've used a Netgear ProSAFE GS108OE as the POE-switch, and a Raspberry PI 3 as the IoT-gateway.
 
