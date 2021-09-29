@@ -181,12 +181,13 @@ In order to do this, the last 2 lines of the code-snippet above will have to run
 
 Raspberry PI
 ------------
-As for powering the IoT setup, I recommend the following:
-
-220v -> POE-switch -> Ethernet converter -> Raspberry PI -> ESP8266 -> Sensors.
-
-For my test setup I've used a Netgear ProSAFE GS108OE (€ 89,95) as Power Over Ethernet (POE)-switch to power the Raspberry PI, the Raspberry PI will in it's turn power the ESP8266 microcontroller, and the ESP8266 will power the sensors.
+For my test setup I've used a Netgear ProSAFE GS108OE (€ 89,95) as Power Over Ethernet (POE) switch to power the Raspberry PI, the Raspberry PI will in it's turn power the ESP8266 microcontroller, and the ESP8266 will power the sensors.
 The final components, a network-cable and a POE-splitter will split power and ethernet signal needed to power up the Raspberry, they are available for about (€ 8,-).
 
-The final setup will look something like this:
+So the power will flow like this:
+
+220v -> POE-switch -> POE-splitter -> Raspberry PI -> ESP8266 -> Sensors.
+
+
+The final setup will look something like:
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/iot_setup.JPG" alt="Final IoT setup" width=800px>
