@@ -73,6 +73,8 @@ The average cost of these kind of kits are about € 15,-.
 
 Most of these sensor have been tested with MicroPython and tutorials on howto connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/)
 
+In order to attach te sensors to a ESP8266 you will need some wire, I recommend getting some dupont wire (Female to Female) should cost about (€ 5,-)
+
 
 Microcontrollers
 ----------------
@@ -94,7 +96,7 @@ At the time of writing this blog, getting one module will cost you (In the Nethe
   Total cost:         € 3,97
 ```
 
-There are several ways of communicating with the chip, once deployed.
+There are several ways of communicating with the microcontroller, once deployed.
 
 - Option 1) Via serial communication using the USB-connection.
 - Option 2) Via Wi-Fi.
@@ -102,7 +104,7 @@ There are several ways of communicating with the chip, once deployed.
 
 I've explored Option 1 and Option 2 in depth, and will share my experience here.
 
-The first step is to erase and flash new firmware onto the ESP8266 device.
+The first step is to erase and flash new firmware onto the ESP8266 device. Firmware is the software that runs on the microcontroller once it is powered, and it's called firmware because you are not able to modify it once written to the chip without interrupting the whole system.
 
 First install the required tools, firmware and create an initial empty boot.py file.
 ```
@@ -114,7 +116,7 @@ touch boot.py # For now make an empty boot.py, later you can fill this with code
 wget 'http://micropython.org/resources/firmware/esp8266-20210902-v1.17.bin'
 curl -s https://raw.githubusercontent.com/micropython/micropython-lib/master/micropython/urllib.urequest/urllib/urequest.py > ureq.py
 ```
-Once the microcontroller boots, it will execute the boot.py file. In this file we will put the logic needed to read data from the attached sensors.
+Once the microcontroller boots, it will run the firmware (Which contains a version of MicroPython) and execute the boot.py file. In this file we will put the logic needed to read data from the attached sensors.
 
 Note that esptool may be outdated, if you get weird errors during invocation, use:
 ```
@@ -178,19 +180,10 @@ In order to do this, the last 2 lines of the code-snippet above will have to run
 
 Raspberry Pi
 ------------
-The Raspberry Pi acts as the IoT-gateway in this setup, and can be used to power the microcontrollers via USB Cable (A Male to Micro B Female).
+The Raspberry Pi acts as the IoT Wi-Fi endpoint in this setup, and can be used to power the microcontrollers via USB Cable (A Male to Micro B Female).
 As for power, I recommend the following setup:
 
 POE-switch -> Ethernet converter -> Raspberry PI -> ESP8266.
 
-For my test-setup I've used a Netgear ProSAFE GS108OE as the POE-switch, and a Raspberry PI 3 as the IoT-gateway.
-
-
-
-
-
-
-
-
-
+For my test-setup I've used a Netgear ProSAFE GS108OE (€ 89,95) as Power Over Ethernet (POE)-switch, and a Raspberry PI 3 as the IoT-gateway. A gateway acts as a central point where all the information gathered from the IoT devices is sent. From this point you are able to make graphs and generate real-time dashboards of the deployed sensors.
 
