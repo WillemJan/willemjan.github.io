@@ -189,6 +189,6 @@ For my test-setup I've used a Netgear ProSAFE GS108OE (€ 89,95) as Power Over 
 The POE-splitter is the final component you will need to have a nice modular IoT-setup to experiment with, and at least one Ethernet-cable.
 
 The final setup will look something like this:
-<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/iot_setup.JPG" alt="Final IoT setup" width=600px>
+<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/iot_setup.JPG" alt="Final IoT setup" width=800px>
 
 
