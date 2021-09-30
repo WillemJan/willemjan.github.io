@@ -15,7 +15,7 @@ Overview
 --------
 
 As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how to deploy these. The Internet of Things (IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think that a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
-During lockdown I had time to experiment with a lot of (barebone) IoT devices, and I will share my IoT-setup here.
+During lockdown I had time to experiment with a lot of (bare-bone) IoT devices, and I will share my IoT-setup here.
 
 <img src="https://s3.eu-central-1.amazonaws.com/centaur-wp/econsultancy/prod/content/uploads/archive/images/resized/0008/6869/atlas_bjsmcfal_2x-blog-flyer.png" alt="Cost of sensors">
 
@@ -67,7 +67,8 @@ Sensors
 Let's start with the sensor part. There are a lot of things you can measure with sensors, ranging from simple switches to water-levels, radar sensors, CO2 sensors ect.
 
 To explore a wide range of possibilities I suggest getting a sensor-kit, something like this:
-![Sensor kit example](https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/sensor-kit.jpg)
+![Sensor kit example](https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/sensor-kit.jpg)  
+
 The average cost of these kind of kits are about € 15,-.
 
 Most of these sensor have been tested with MicroPython and tutorials on how to connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
@@ -181,7 +182,7 @@ In order to do this, the last 2 lines of the code-snippet above will have to run
 Raspberry PI
 ------------
 For my test setup I've used a Netgear ProSAFE GS108OE (€ 89,95) as [Power Over Ethernet](https://en.wikipedia.org/wiki/Power_over_Ethernet) (POE) switch to power the Raspberry PI, the Raspberry PI will in it's turn power the ESP8266 microcontroller, and the ESP8266 will power the sensors.
-The final components, a network-cable and a POE-splitter will split power and ethernet signal needed to power up the Raspberry, they are available for about (€ 8,-).
+The final components, a network-cable and a POE-splitter will split power and Ethernet signal needed to power up the Raspberry, they are available for about (€ 8,-).
 
 So the power will flow like this:
 
