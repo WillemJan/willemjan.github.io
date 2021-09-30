@@ -122,9 +122,32 @@ Note that esptool may be outdated, if you get weird errors during invocation, us
 sudo apt remove -y esptool
 sudo pip3 install esptool
 ```
-See this page for more info on the MicroPython[firmware](http://micropython.org/download/esp8266/).
+See this page for more info on the MicroPython [firmware](http://micropython.org/download/esp8266/), and the github page for the [esptool](https://github.com/espressif/esptool)
 
-This is a little flash & disaster recovery script:
+Attach your ESP8266 to your USB-port of choice, and verify the connection by identifying the chip:
+```
+esptool.py chip_id
+```
+
+If all is well the output will look something like this:
+```
+esptool.py v3.2-dev
+Found 1 serial ports
+Serial port /dev/ttyUSB0
+Connecting....
+Detecting chip type... ESP8266
+Chip is ESP8266EX
+Features: WiFi
+Crystal is 26MHz
+MAC: e8:db:48:ad:97:fe
+Uploading stub...
+Running stub...
+Stub running...
+Chip ID: 0x00ad97fd
+Hard resetting via RTS pin...
+```
+
+Next is creating a little flash & disaster recovery script:
 ```
 #!/usr/bin/env bash
 
@@ -137,12 +160,12 @@ ampy  -p /dev/ttyUSB0 mkdir urequests
 ampy  -p /dev/ttyUSB0 put ureq.py /urequests/__init__.py
 ampy  -p /dev/ttyUSB0 get boot.py
 
-picocom --baud 115200 /dev/ttyUSB0
+picocom --baud 115200 /dev/ttyUSB0 # This will create a connection to your ESP, to quit press CTRL-a, CTRL-x
 ```
 Whenever you can't get readings from your ESP8266, don't hesitate to flash it again.
 
 Using the serial connection you will be able te transfer data very reliable, but not as fast as over Wi-Fi (2.7 mega bits/sec) according to this [load tesing an esp8266](https://arunoda.me/blog/load-testing-an-esp8266).
-But for low-latency and high reliability/security stuff a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port and this works like a charm.
+But for low-latency and high reliability/security data transfer a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port and this works like a charm.
 
 Installing pyserial:
 ```
@@ -165,7 +188,7 @@ Please note the port, which by default will be '/dev/ttyUSB0' under Debian, it m
 sudo dmesg
 ```
 
-By default the ESP8266 turns on a Wi-Fi Access Point, if you use a serial connection it's wise to turn this off completely using the following code: (You can add this to the boot.py file using your favorite editor.)
+By default the ESP8266 turns on a Wi-Fi Access Point (AP), if you want to use a serial connection it's wise to turn the Wi-Fi completely using the following code: (You can add this to the boot.py file using your favorite editor.)
 ```
 import network
 sta_if = network.WLAN(network.STA_IF)
@@ -173,7 +196,7 @@ sta_if.active(False)
 ap_if = network.WLAN(network.AP_IF)
 ap_if.active(False)
 ```
-An access point is normaly used to connect to, you can do nice things with this option, like update the firmware 
+An AP is normaly used to connect to, you can do nice things with this option, like update the firmware and run a webserver, but for this blog I will not explore this scenario.
 
 I prefer to let the ESP8266 send data, rather then having the Raspberry PI poll all the ESP8266's deployed, so I recommend turning off the access point (Which will by default show up something like 'MicroPython-2884894' in your Wi-Fi network list).
 In order to do this, the last 2 lines of the code-snippet above will have to run first, before starting the main loop, add them to the boot.py file.
