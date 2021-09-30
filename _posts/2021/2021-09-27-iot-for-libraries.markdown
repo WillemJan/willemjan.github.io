@@ -74,7 +74,7 @@ The average cost of these kind of kits are about € 15,-.
 
 Most of these sensor have been tested with MicroPython and tutorials on how to connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
 
-In order to attach te sensors to a ESP8266 you will need some wire, I recommend getting some dupont wire (Female to Female) should cost about (€ 5,-).
+In order to attach te sensors to a ESP8266 you will need some wire, I recommend getting some [DuPont wire](https://en.wikipedia.org/wiki/Jump_wire) (Female to Female) should cost about (€ 5,-).
 
 
 Microcontrollers
