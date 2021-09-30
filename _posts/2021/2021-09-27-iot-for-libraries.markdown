@@ -21,7 +21,7 @@ During lockdown I had time to experiment with a lot of (bare-bone) IoT devices, 
 
 What's in it for me
 -------------------
-Whether your a teacher a librarian or a hacker, in this blog I will try to show you how sensors could be deployed in your environment.
+Whether your a teacher a librarian or a hacker, in this blog I will try to show you how sensors could be deployed in your environment.  
 
 If you don't have a technical background, some parts of this blog might be hard to understand, I suggest you skip all code parts, and read it anyway to get a little understanding of what all the buzz about Internet of Things is all about.
 Since the cost of the devices that are at the core of this revolution (microcontrollers) are now dirt-cheap, it's hard to get devices without them, yes, even your toothbrush will be equipped with these kind of technologies.
@@ -194,10 +194,10 @@ The final setup will look something like the image shown below:
 
 The information gathered from the sensors will travel the oposite way like this:
 
-Scenario 1)
+Scenario 1)  
 POE-switch <- Network cable <- POE-splitter <- Raspberry PI <- USB micro cable <- ESP8266 <- DuPont wire <- Sensors
 
-Scenario 2)
+Scenario 2)  
 POE-switch <- Network cable <- POE-splitter <- Raspberry PI ) Wi-Fi ( ESP8266 <- DuPont wire <- Sensors
 
 By creating a setup like this you will be able to separate all IoT related traffic from the rest of your network.
