@@ -61,7 +61,7 @@ Now that we've defined our programming language let's talk hardware, and how you
 
 The general idea here is this:
 
-Sensor -> Microcontroller -> Raspberry PI
+Sensor -> Microcontroller -> Raspberry Pi
 
 Sensors
 -------
@@ -70,16 +70,169 @@ Let's start with the sensor part. There are a lot of things you can measure with
 To explore a wide range of possibilities I suggest getting a sensor-kit, something like this:
 ![Sensor kit example](https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/sensor-kit.jpg)  
 
-The average cost of these kind of kits are about € 15,-.
-
 Most of these sensor have been tested with MicroPython and tutorials on how to connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
+In order to attach the sensors to a ESP8266 you will need some wire, I recommend getting some [DuPont wire](https://en.wikipedia.org/wiki/Jump_wire) (Female to Female).
 
-In order to attach the sensors to a ESP8266 you will need some wire, I recommend getting some [DuPont wire](https://en.wikipedia.org/wiki/Jump_wire) (Female to Female) should cost about (€ 5,-) for loads of them.
+Later in this blog I will demonstrate how to use the HC-SR04 Ultrasonic Sonar Distance Sensor as well as a the HC-SR501 PIR Motion Sensor.
 
+Many kind of sensors sense the real-world and send digital information right back to the microcontroller. In order to make sense of what the sensor is measuring often a calculation step is needed, or some logic to enhance what the sensor is reporting back to the Raspberry Pi. Most (basic) sensors require three wires running from the microcontroller to the sensor, these are power, ground and a data-line (sensor output).
+
+Here is a python class to measure distance using a HCSR04 ultra sonic range sensor, I will expand on this later.
+
+```
+__version__ = '0.2.0'
+__author__ = 'Roberto Sánchez'
+__license__ = "Apache License 2.0. https://www.apache.org/licenses/LICENSE-2.0"
+
+class HCSR04:
+    """
+    Driver to use the untrasonic sensor HC-SR04.
+    The sensor range is between 2cm and 4m.
+    The timeouts received listening to echo pin are converted to OSError('Out of range')
+    """
+    # echo_timeout_us is based in chip range limit (400cm)
+    def __init__(self, trigger_pin, echo_pin, echo_timeout_us=500*2*30):
+        """
+        trigger_pin: Output pin to send pulses
+        echo_pin: Readonly pin to measure the distance. The pin should be protected with 1k resistor
+        echo_timeout_us: Timeout in microseconds to listen to echo pin. 
+        By default is based in sensor limit range (4m)
+        """
+        self.echo_timeout_us = echo_timeout_us
+        # Init trigger pin (out)
+        self.trigger = machine.Pin(trigger_pin, mode=machine.Pin.OUT, pull=None)
+        self.trigger.value(0)
+
+        # Init echo pin (in)
+        self.echo = machine.Pin(echo_pin, mode=machine.Pin.IN, pull=None)
+
+    def _send_pulse_and_wait(self):
+        """
+        Send the pulse to trigger and listen on echo pin.
+        We use the method `machine.time_pulse_us()` to get the microseconds until the echo is received.
+        """
+        self.trigger.value(0) # Stabilize the sensor
+        time.sleep_us(5)
+        self.trigger.value(1)
+        # Send a 10us pulse.
+        time.sleep_us(10)
+        self.trigger.value(0)
+        try:
+            pulse_time = machine.time_pulse_us(self.echo, 1, self.echo_timeout_us)
+            return pulse_time
+        except OSError as ex:
+            if ex.args[0] == 110: # 110 = ETIMEDOUT
+                raise OSError('Out of range')
+            raise ex
+
+    def distance_mm(self):
+        """
+        Get the distance in milimeters without floating point operations.
+        """
+        pulse_time = self._send_pulse_and_wait()
+
+        # To calculate the distance we get the pulse_time and divide it by 2 
+        # (the pulse walk the distance twice) and by 29.1 becasue
+        # the sound speed on air (343.2 m/s), that It's equivalent to
+        # 0.34320 mm/us that is 1mm each 2.91us
+        # pulse_time // 2 // 2.91 -> pulse_time // 5.82 -> pulse_time * 100 // 582 
+        mm = pulse_time * 100 // 582
+        return mm
+
+    def distance_cm(self):
+        """
+        Get the distance in centimeters with floating point operations.
+        It returns a float
+        """
+        pulse_time = self._send_pulse_and_wait()
+
+        # To calculate the distance we get the pulse_time and divide it by 2 
+        # (the pulse walk the distance twice) and by 29.1 becasue
+        # the sound speed on air (343.2 m/s), that It's equivalent to
+        # 0.034320 cm/us that is 1cm each 29.1us
+        cms = (pulse_time / 2) / 29.1
+        return cms
+
+    __version__ = '0.2.0'
+    __author__ = 'Roberto Sánchez'
+    __license__ = "Apache License 2.0. https://www.apache.org/licenses/LICENSE-2.0"
+
+    """
+    Driver to use the untrasonic sensor HC-SR04.
+    The sensor range is between 2cm and 4m.
+    The timeouts received listening to echo pin are converted to OSError('Out of range')
+    """
+    # echo_timeout_us is based in chip range limit (400cm)
+    def __init__(self, trigger_pin, echo_pin, echo_timeout_us=500*2*30):
+        """
+        trigger_pin: Output pin to send pulses
+        echo_pin: Readonly pin to measure the distance. The pin should be protected with 1k resistor
+        echo_timeout_us: Timeout in microseconds to listen to echo pin. 
+        By default is based in sensor limit range (4m)
+        """
+        self.echo_timeout_us = echo_timeout_us
+        # Init trigger pin (out)
+        self.trigger = machine.Pin(trigger_pin, mode=machine.Pin.OUT, pull=None)
+        self.trigger.value(0)
+
+        # Init echo pin (in)
+        self.echo = machine.Pin(echo_pin, mode=machine.Pin.IN, pull=None)
+
+    def _send_pulse_and_wait(self):
+        """
+        Send the pulse to trigger and listen on echo pin.
+        We use the method `machine.time_pulse_us()` to get the microseconds until the echo is received.
+        """
+        self.trigger.value(0) # Stabilize the sensor
+        time.sleep_us(5)
+        self.trigger.value(1)
+        # Send a 10us pulse.
+        time.sleep_us(10)
+        self.trigger.value(0)
+        try:
+            pulse_time = machine.time_pulse_us(self.echo, 1, self.echo_timeout_us)
+            return pulse_time
+        except OSError as ex:
+            if ex.args[0] == 110: # 110 = ETIMEDOUT
+                raise OSError('Out of range')
+            raise ex
+
+    def distance_mm(self):
+        """
+        Get the distance in milimeters without floating point operations.
+        """
+        pulse_time = self._send_pulse_and_wait()
+
+        # To calculate the distance we get the pulse_time and divide it by 2 
+        # (the pulse walk the distance twice) and by 29.1 becasue
+        # the sound speed on air (343.2 m/s), that It's equivalent to
+        # 0.34320 mm/us that is 1mm each 2.91us
+        # pulse_time // 2 // 2.91 -> pulse_time // 5.82 -> pulse_time * 100 // 582 
+        mm = pulse_time * 100 // 582
+        return mm
+
+    def distance_cm(self):
+        """
+        Get the distance in centimeters with floating point operations.
+        It returns a float
+        """
+        pulse_time = self._send_pulse_and_wait()
+
+        # To calculate the distance we get the pulse_time and divide it by 2 
+        # (the pulse walk the distance twice) and by 29.1 becasue
+        # the sound speed on air (343.2 m/s), that It's equivalent to
+        # 0.034320 cm/us that is 1cm each 29.1us
+        cms = (pulse_time / 2) / 29.1
+        return cms
+```
+
+<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_sensor.jpg" alt="Ultrasonic range sensor">  
+
+<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_schem.jpg" alt="Ultrasonic range sensor schematics">  
 
 Microcontrollers
 ----------------
-I've tested several devices for this purpose, and the thing I like best and is the ESP8266 (€ 3,97) used in the [NodeMCU](https://en.wikipedia.org/wiki/NodeMCU).
+I've tested several devices for this purpose, and the thing I like best and is the ESP8266 used in the [NodeMCU](https://en.wikipedia.org/wiki/NodeMCU).
 For all experiments I used Debian 10.10 (Buster) on my laptop and python3 to communicate with the ESP8266 microcontroller, but this can also be done from the Raspberry PI.
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/esp8266.png" alt="ESP8266 controller">
@@ -92,8 +245,6 @@ There are several ways of communicating with the microcontroller, once deployed.
 
 - Scenario 1) Via serial communication using the USB-connection.
 
-This is ok as long as you don't need to fetch/send lots of data, or want something more secure/reliable than Wi-Fi.
-(Fun fact, it's easy to turn the device into a highly effective Wi-Fi [jammer](https://deauth.me/).)
 
 - Scenario 2) Via Wi-Fi.
 - Scenario 3) By other means, like the SPI bus, GMS module (Not covered in this blog).
@@ -159,8 +310,10 @@ picocom --baud 115200 /dev/ttyUSB0 # This will create a connection to your ESP, 
 ```
 Whenever you can't get readings from your ESP8266, don't hesitate to flash it again.
 
+Scenario 1
+=========
 Using the serial connection you will be able te transfer data very reliable, but not as fast as over Wi-Fi (2.7 mega bits/sec) according to this [load tesing an esp8266](https://arunoda.me/blog/load-testing-an-esp8266).
-But for low-latency and high reliability/security data transfer a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port and this works like a charm.
+But for low-latency and high reliability/security data transfer a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port (cable length <5M) and this works like a charm.
 
 Installing pyserial:
 ```
@@ -196,11 +349,84 @@ An AP is normaly used to connect to, you can do nice things with this option, li
 I prefer to let the ESP8266 send data, rather then having the Raspberry Pi poll all the ESP8266's deployed, so I recommend turning off the access point (Which will by default show up something like 'MicroPython-2884894' in your Wi-Fi network list).
 In order to do this, the last 2 lines of the code-snippet above will have to run first, before starting the main loop, add them to the boot.py file.
 
+Scenario 2
+==========
+
+The example below shows you how to transer data from the ESP8266 to a mosquitto server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol.
+```
+from umqtt.simple import MQTTClient
+
+import machine
+import network
+import time
+import ujson
+
+ap = network.WLAN(network.AP_IF)
+ap.active(False)
+
+
+config = {"dns": "8.8.8.8",
+          "gateway": "192.168.0.1",
+          "ip": "192.168.0.4",
+          "mosquito_server": '192.168.0.1',
+          "nodeId": "shelf_right",
+          "subnet": "255.255.255.0",
+          "wifiPass": "passwd",
+          "wifiSSID": "iothub"}
+
+def wifi_connect(config):
+    print('connecting to %s' % config["wifiSSID"])
+    sta = network.WLAN(network.STA_IF)
+    sta.active(True)
+
+    sta.ifconfig((config['ip'],
+                  config['subnet'],
+                  config['gateway'],
+                  config['dns']))
+
+    sta.connect(config['wifiSSID'],
+                config['wifiPass'])
+
+	time.sleep(1)
+    print('connected to %s' % config["wifiSSID"])
+
+def main(server=config['mosquito_server'], hc):
+    client = MQTTClient('umqtt_client', server)
+    client.set_callback(pub_range_right)
+    client.connect()
+
+    loop = True
+
+    while loop:
+		try:
+			distance_cm = hc.distance_cm()
+		    client.publish(b"distance_right", ("%i" % distance_cm).encode("utf-8"))
+		except:
+			loop = False
+
+    c.disconnect()
+
+if __name__ == "__main__":
+    hc = HCSR04(5, 4)
+	wifi_connect(config)
+	error = 0
+
+	while True:
+		if error > 1:
+			wifi_connect(config)
+			error = 0
+		try:
+			main(config, hc)
+		except:
+			error += 1
+
+```
+
 Raspberry Pi
 ------------
-I reccomend getting a Raspberry Pi 3 Model B (€ 38,-) or better. The tremedous speed of this device will allow you to do some amazing visualiastions of your sensor data, muchas gracias [Eben Upton (YT)](https://www.youtube.com/watch?v=UCt6d0SCxO4).
-For my test setup I used a Netgear ProSAFE GS108OE (€ 89,95) as [Power Over Ethernet](https://en.wikipedia.org/wiki/Power_over_Ethernet) (POE) switch to power the Raspberry Pi, the Raspberry Pi will in it's turn power the ESP8266 microcontroller, and the ESP8266 will power the sensors.
-The final components, a network-cable and a POE-splitter will split power and Ethernet signal needed to power up the Raspberry, they are available for about (€ 8,-).
+I recommend getting a Raspberry Pi 3 Model B or better. The tremendous speed of this device will allow you to do some amazing visualizations of your sensor data, muchas gracias [Eben Upton (YT)](https://www.youtube.com/watch?v=UCt6d0SCxO4).
+For my test setup I used a Netgear ProSAFE GS108OE as [Power Over Ethernet](https://en.wikipedia.org/wiki/Power_over_Ethernet) (POE) switch to power the Raspberry Pi, the Raspberry Pi will in it's turn power the ESP8266 microcontroller, and the ESP8266 will power the sensors.
+The final components, a network-cable and a POE-splitter will split power and Ethernet signal needed to power up the Raspberry.
 
 So the power will flow like this:
 
@@ -209,7 +435,7 @@ POE-switch -> Network cable -> POE-splitter -> Raspberry Pi -> USB micro cable -
 The final setup will look something like the image shown below:
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/iot_setup.JPG" alt="Final IoT setup" width=768px>
 
-The information gathered from the sensors will travel the oposite way like this:
+The information gathered from the sensors will travels the oposite way like this:
 
 Scenario 1)  
 POE-switch <- Network cable <- POE-splitter <- Raspberry Pi <- USB micro cable <- ESP8266 <- DuPont wire <- Sensors
@@ -218,19 +444,16 @@ Scenario 2)
 POE-switch <- Network cable <- POE-splitter <- Raspberry Pi ) Wi-Fi ( ESP8266 <- DuPont wire <- Sensors
 
 By creating a setup like this you will be able to separate all IoT related traffic from the rest of your network.
-The data will be processed on the Raspberry Pi, from your internal network you will only need access to the Raspberry Pi's web-interface to look at the stats generated by accumulating sensor data.
+The data will be processed on the Raspberry Pi, from your internal network you will only need access to the Raspberry Pi's web-interface to look at the stats generated by accumulating sensor data. You could also hookup a monitor directly to the Raspberry Pi and create a real-time display using something like Pygame.
 
-Whilst many solutions I've studied on the Internet propagate the idea of exposing your microcontrollers directly to the Internet, I think this is a bad idea from a security and privacy standpoint. Sure it has some advantages, but they outweigh my concerns of getting hacked or data fed into some [neural-network](https://en.wikipedia.org/wiki/Neural_network) out of my control.
+Whilst many solutions I've studied on the Internet propagate the idea of exposing your microcontrollers directly to the Internet, I think this is a bad idea from a security and privacy standpoint. Sure it has some advantages, but they outweigh my concerns of getting hacked or data fed into some cloud infra. An other option I've seen is connecting a ESP8266 via Wi-Fi to a smartphone, which is as [dangerous](https://edwardsnowden.substack.com/p/ns-oh-god-how-is-this-legal) as it gets. The ESP8266 itself is a perfect tool for [deauthing](https://github.com/SpacehuhnTech/esp8266_deauther) Wi-Fi networks, but that's a subject on it's own.
 
-Putting things together
------------------------
+To be able to receive and store data, I recommend using [mosquitto](https://mosquitto.org/). 
+
+
+Demo time
+---------
 
 I’ve done some work on an interactive bookshelf as the (beta)final product. The first step is to create an index of all the books on the shelf. Next align the index of the books to physical location of the books (using a ultrasonic range sensor), and add a RGB-led strip above the books.
-
-
-
-
-
-
 
 
