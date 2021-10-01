@@ -77,7 +77,7 @@ Later in this blog I will demonstrate how to use the HC-SR04 Ultrasonic Sonar Di
 
 Many kind of sensors sense the real-world and send digital information right back to the microcontroller. In order to make sense of what the sensor is measuring often a calculation step is needed, or some logic to enhance what the sensor is reporting back to the Raspberry Pi. Most (basic) sensors require three wires running from the microcontroller to the sensor, these are power, ground and a data-line (sensor output).
 
-Here is a python class to measure distance using a HCSR04 ultra sonic range sensor, I will expand on this later.
+Here is a python class to measure distance using a HCSR04 ultrasonic range sensor, I will expand on this later.
 
 ```
 __version__ = '0.2.0'
@@ -349,10 +349,29 @@ An AP is normaly used to connect to, you can do nice things with this option, li
 I prefer to let the ESP8266 send data, rather then having the Raspberry Pi poll all the ESP8266's deployed, so I recommend turning off the access point (Which will by default show up something like 'MicroPython-2884894' in your Wi-Fi network list).
 In order to do this, the last 2 lines of the code-snippet above will have to run first, before starting the main loop, add them to the boot.py file.
 
+The final result, reading the Ultrasonic range sensor will look something like this:
+```
+import network
+
+sta_if = network.WLAN(network.STA_IF)
+sta_if.active(False)
+ap_if = network.WLAN(network.AP_IF)
+ap_if.active(False)
+
+hc = HCSR04(5, 4)
+
+while True:
+    try:
+        distance_cm = hc.distance_cm()
+        print(distance_cm)
+    except:
+        pass
+```
+
 Scenario 2
 ==========
 
-The example below shows you how to transer data from the ESP8266 to a mosquitto server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol.
+The example below shows you how to transer data from the ESP8266 to a [mosquitto](https://mosquitto.org/) server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol.
 ```
 from umqtt.simple import MQTTClient
 
@@ -363,7 +382,6 @@ import ujson
 
 ap = network.WLAN(network.AP_IF)
 ap.active(False)
-
 
 config = {"dns": "8.8.8.8",
           "gateway": "192.168.0.1",
@@ -448,8 +466,7 @@ The data will be processed on the Raspberry Pi, from your internal network you w
 
 Whilst many solutions I've studied on the Internet propagate the idea of exposing your microcontrollers directly to the Internet, I think this is a bad idea from a security and privacy standpoint. Sure it has some advantages, but they outweigh my concerns of getting hacked or data fed into some cloud infra. An other option I've seen is connecting a ESP8266 via Wi-Fi to a smartphone, which is as [dangerous](https://edwardsnowden.substack.com/p/ns-oh-god-how-is-this-legal) as it gets. The ESP8266 itself is a perfect tool for [deauthing](https://github.com/SpacehuhnTech/esp8266_deauther) Wi-Fi networks, but that's a subject on it's own.
 
-To be able to receive and store data, I recommend using [mosquitto](https://mosquitto.org/). 
-
+To be able to receive and store data, I recommend using 
 
 Demo time
 ---------
