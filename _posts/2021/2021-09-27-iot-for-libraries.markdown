@@ -223,8 +223,7 @@ class HCSR04:
         return cms
 ```
 
-<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_sensor.jpg" alt="Ultrasonic range sensor">  
-
+<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_sensor.jpg" alt="Ultrasonic range sensor" width=200>
 
 Microcontrollers
 ----------------
@@ -462,7 +461,12 @@ The data will be processed on the Raspberry Pi, from your internal network you w
 
 Whilst many solutions I've studied on the Internet propagate the idea of exposing your microcontrollers directly to the Internet, I think this is a bad idea from a security and privacy standpoint. Sure it has some advantages, but they outweigh my concerns of getting hacked or data fed into some cloud infra. An other option I've seen is connecting a ESP8266 via Wi-Fi to a smartphone, which is as [dangerous](https://edwardsnowden.substack.com/p/ns-oh-god-how-is-this-legal) as it gets. The ESP8266 itself is a perfect tool for [deauthing](https://github.com/SpacehuhnTech/esp8266_deauther) Wi-Fi networks, but that's a subject on it's own.
 
-To be able to receive and store data, I recommend using 
+But if you have many sensors and ESP8266 around a Wi-Fi gateway is a great solution for connection all the devices.
+
+Use the following commands on the Raspberry Pi to turn it into an IoT gateway:
+```
+sudo apt install -y mosquitto hostapd
+```
 
 Demo time
 ---------
