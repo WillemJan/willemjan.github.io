@@ -73,12 +73,9 @@ To explore a wide range of possibilities I suggest getting a sensor-kit, somethi
 Most of these sensor have been tested with MicroPython and tutorials on how to connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
 In order to attach the sensors to a ESP8266 you will need some wire, I recommend getting some [DuPont wire](https://en.wikipedia.org/wiki/Jump_wire) (Female to Female).
 
-Later in this blog I will demonstrate how to use the HC-SR04 Ultrasonic Sonar Distance Sensor as well as a the HC-SR501 PIR Motion Sensor.
-
 Many kind of sensors sense the real-world and send digital information right back to the microcontroller. In order to make sense of what the sensor is measuring often a calculation step is needed, or some logic to enhance what the sensor is reporting back to the Raspberry Pi. Most (basic) sensors require three wires running from the microcontroller to the sensor, these are power, ground and a data-line (sensor output).
 
-Here is a python class to measure distance using a HCSR04 ultrasonic range sensor, I will expand on this later.
-
+Here is a python class to measure distance using a HCSR04 ultrasonic range sensor, I will expand on this later:
 ```
 __version__ = '0.2.0'
 __author__ = 'Roberto Sánchez'
@@ -228,7 +225,6 @@ class HCSR04:
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_sensor.jpg" alt="Ultrasonic range sensor">  
 
-<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_schem.jpg" alt="Ultrasonic range sensor schematics">  
 
 Microcontrollers
 ----------------
@@ -244,8 +240,6 @@ According to Wikipedia:
 There are several ways of communicating with the microcontroller, once deployed.
 
 - Scenario 1) Via serial communication using the USB-connection.
-
-
 - Scenario 2) Via Wi-Fi.
 - Scenario 3) By other means, like the SPI bus, GMS module (Not covered in this blog).
 
@@ -314,6 +308,8 @@ Scenario 1
 =========
 Using the serial connection you will be able te transfer data very reliable, but not as fast as over Wi-Fi (2.7 mega bits/sec) according to this [load tesing an esp8266](https://arunoda.me/blog/load-testing-an-esp8266).
 But for low-latency and high reliability/security data transfer a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port (cable length <5M) and this works like a charm.
+
+<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_schem.jpg" alt="Ultrasonic range sensor schematics">  
 
 Installing pyserial:
 ```
@@ -472,5 +468,3 @@ Demo time
 ---------
 
 I’ve done some work on an interactive bookshelf as the (beta)final product. The first step is to create an index of all the books on the shelf. Next align the index of the books to physical location of the books (using a ultrasonic range sensor), and add a RGB-led strip above the books.
-
-
