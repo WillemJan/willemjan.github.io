@@ -12,7 +12,7 @@ IoT for libraries
 **To measure or not to measure that's the question.**
 
 Overview
---------
+=================
 As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how to deploy these. The Internet of Things (IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think that a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
 During lockdown I had time to experiment with a lot of (bare-bone) IoT devices, and I will share my IoT-setup here.
 
@@ -40,7 +40,7 @@ For the home user a lot of stuff sold as IoT works out of the box, setup-procedu
 
 
 Let's get technical
--------------------
+===================
 There are a lot of good resources on the Internet about how-to setup your own IoT landscape, so making the right choices is important.
 My weapon of choice for setting thins up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/) or how to hookup IoT to the cloud.
 
@@ -61,7 +61,7 @@ The general idea here is this:
 Sensor -> Microcontroller -> Raspberry Pi
 
 Sensors
--------
+=======
 Let's start with the sensor part. There are a lot of things you can measure with sensors, ranging from simple switches to water-levels, radar sensors, CO2 sensors etc.
 
 To explore a wide range of possibilities I suggest getting a sensor-kit, something like this:
@@ -77,7 +77,7 @@ Here is a small MicroPython example for reading a [HCSR04](https://github.com/an
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_sensor.jpg" alt="HCSR04 Ultrasonic range sensor" width=200>
 
 Microcontrollers
-----------------
+================
 I've tested several devices for this purpose, and the thing I like best and is the ESP8266 used in the [NodeMCU](https://en.wikipedia.org/wiki/NodeMCU).
 For all experiments I used Debian 10.10 (Buster) on my laptop and python3 to communicate with the ESP8266 microcontroller, but this can also be done from the Raspberry PI.
 
@@ -155,7 +155,7 @@ picocom --baud 115200 /dev/ttyUSB0 # This will create a connection to your ESP, 
 Whenever you can't get readings from your ESP8266, don't hesitate to flash it again.
 
 Scenario 1
-=========
+----------
 Using the serial connection you will be able te transfer data very reliable, but not as fast as over Wi-Fi (2.7 mega bits/sec) according to this [load tesing an esp8266](https://arunoda.me/blog/load-testing-an-esp8266).
 But for low-latency and high reliability/security data transfer a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port (cable length <5M) and this works like a charm.
 
@@ -215,7 +215,7 @@ while True:
 ```
 
 Scenario 2
-==========
+----------
 The example below shows you how to transer data from the ESP8266 to a [mosquitto](https://mosquitto.org/) server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol. The example measures the distance to an object using the a ultrasonic range sensor.
 
 
@@ -289,7 +289,7 @@ if __name__ == "__main__":
 ```
 
 Raspberry Pi
-------------
+============
 I recommend getting a Raspberry Pi 3 Model B or better. The tremendous speed of this device will allow you to do some amazing visualizations of your sensor data, muchas gracias [Eben Upton (YT)](https://www.youtube.com/watch?v=UCt6d0SCxO4).
 For my test setup I used a Netgear ProSAFE GS108OE as [Power Over Ethernet](https://en.wikipedia.org/wiki/Power_over_Ethernet) (POE) switch to power the Raspberry Pi, the Raspberry Pi will in it's turn power the ESP8266 microcontroller, and the ESP8266 will power the sensors.
 The final components, a network-cable and a POE-splitter will split power and Ethernet signal needed to power up the Raspberry.
@@ -316,7 +316,7 @@ Whilst many solutions I've studied on the Internet propagate the idea of exposin
 
 
 Scenario 2
-==========
+----------
 If you have many sensors and ESP8266 around a Wi-Fi access point is a great solution for connection all the devices.
 
 Use the following commands on the Raspberry Pi to turn it into an IoT access point / gateway:
@@ -350,18 +350,18 @@ country_code=nl
 This will start an Access Point, to which the ESP8266 can connect.
 
 Bookshelf demo
---------------
+==============
 I’ve done some work on an interactive bookshelf as the (beta)final product. The first step is to create an index of all the books on the shelf. Next align the index of the books to physical location of the books (using a ultrasonic range sensor), and add a RGB-led strip above the books. Once a book is fetched from the shelf, by using the position information you can now show additional data about the book, and trigger other actions.
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/bookshelf1.jpg" alt="Bookshelf demo">
 
-
 Creating a book-index
-=====================
-
+---------------------
 In order to create an index of the bookshelf I've created a file (booklist.txt) containing ISBN-13 numbers, and used the python package isbnlib to fetch metadata (like author and publish-year).
 
 ```
+#!/usr/bin/env python3
+
 import json
 import isbnlib #  pip3 install isbnlib
 
@@ -388,7 +388,7 @@ with open('booklist.json', 'w') as fh:
 I've manualy added some extra metadata like "Image" and "Abstract".
 
 Calibration
-===========
+-----------
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/calibration.png" alt="Calibration">
 
@@ -431,23 +431,24 @@ left_c = right_c = -1
 book_align = []
 
 for book in bookshelf_contents:
+    screen.fill((0, 0, 0))
+    img = font.render("Calibration time..", True, (200, 200, 200))
+    screen.blit(img, (40, 100))
+    img = font.render("Please fetch: ", True, (200, 200, 200))
+    screen.blit(img, (40, 100 + img.get_height() + 4))
+
     if not book.get('Title'):
         continue
-
-    screen.fill((0, 0, 0))
-    img = font.render("Calibration time..", True, (10,10,200))
-    screen.blit(img, (40,100))
-    img = font.render("Please fetch: ", True, (10,10,200))
-    screen.blit(img, (40,100 + img.get_height() + 4))
-
     img = font.render(book['Title'].split(' - ')[0], True, (100,200,100))
-    screen.blit(img, ((SCREEN_WIDTH /8), 20))
+    screen.blit(img, ((SCREEN_WIDTH /3), 120))
 
     img = font.render(book['Year'].split(' - ')[0], True, (100,200,100))
-    screen.blit(img, ((SCREEN_WIDTH /8), 70))
+    screen.blit(img, ((SCREEN_WIDTH /3), 170))
 
     img = font.render(book['Publisher'].split(' - ')[0], True, (100,200,100))
-    screen.blit(img, ((SCREEN_WIDTH /8), 120))
+    screen.blit(img, ((SCREEN_WIDTH /3), 220))
+    
+    pygame.display.flip()
 
     ser = serial.Serial(SENSOR_LEFT, 115200)
     all_reading = []
@@ -495,7 +496,6 @@ for book in bookshelf_contents:
         else:
             if not res == right_c:
                 all_reading.append(res)
-
     print("right done!", all_reading)
     right_c = all_reading.pop()
 
@@ -503,5 +503,5 @@ for book in bookshelf_contents:
     book_align.append(book)
 
 with open('booklist_alignd.json', 'w') as fh:
-	fh.write(json.dumps(book_align))
+    fh.write(json.dumps(book_align))
 ```
