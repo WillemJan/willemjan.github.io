@@ -13,7 +13,6 @@ IoT for libraries
 
 Overview
 --------
-
 As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how to deploy these. The Internet of Things (IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think that a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
 During lockdown I had time to experiment with a lot of (bare-bone) IoT devices, and I will share my IoT-setup here.
 
@@ -75,153 +74,7 @@ In order to attach the sensors to a ESP8266 you will need some wire, I recommend
 
 Many kind of sensors sense the real-world and send digital information right back to the microcontroller. In order to make sense of what the sensor is measuring often a calculation step is needed, or some logic to enhance what the sensor is reporting back to the Raspberry Pi. Most (basic) sensors require three wires running from the microcontroller to the sensor, these are power, ground and a data-line (sensor output).
 
-Here is a python class to measure distance using a HCSR04 ultrasonic range sensor, I will expand on this later:
-```
-__version__ = '0.2.0'
-__author__ = 'Roberto Sánchez'
-__license__ = "Apache License 2.0. https://www.apache.org/licenses/LICENSE-2.0"
-
-class HCSR04:
-    """
-    Driver to use the untrasonic sensor HC-SR04.
-    The sensor range is between 2cm and 4m.
-    The timeouts received listening to echo pin are converted to OSError('Out of range')
-    """
-    # echo_timeout_us is based in chip range limit (400cm)
-    def __init__(self, trigger_pin, echo_pin, echo_timeout_us=500*2*30):
-        """
-        trigger_pin: Output pin to send pulses
-        echo_pin: Readonly pin to measure the distance. The pin should be protected with 1k resistor
-        echo_timeout_us: Timeout in microseconds to listen to echo pin. 
-        By default is based in sensor limit range (4m)
-        """
-        self.echo_timeout_us = echo_timeout_us
-        # Init trigger pin (out)
-        self.trigger = machine.Pin(trigger_pin, mode=machine.Pin.OUT, pull=None)
-        self.trigger.value(0)
-
-        # Init echo pin (in)
-        self.echo = machine.Pin(echo_pin, mode=machine.Pin.IN, pull=None)
-
-    def _send_pulse_and_wait(self):
-        """
-        Send the pulse to trigger and listen on echo pin.
-        We use the method `machine.time_pulse_us()` to get the microseconds until the echo is received.
-        """
-        self.trigger.value(0) # Stabilize the sensor
-        time.sleep_us(5)
-        self.trigger.value(1)
-        # Send a 10us pulse.
-        time.sleep_us(10)
-        self.trigger.value(0)
-        try:
-            pulse_time = machine.time_pulse_us(self.echo, 1, self.echo_timeout_us)
-            return pulse_time
-        except OSError as ex:
-            if ex.args[0] == 110: # 110 = ETIMEDOUT
-                raise OSError('Out of range')
-            raise ex
-
-    def distance_mm(self):
-        """
-        Get the distance in milimeters without floating point operations.
-        """
-        pulse_time = self._send_pulse_and_wait()
-
-        # To calculate the distance we get the pulse_time and divide it by 2 
-        # (the pulse walk the distance twice) and by 29.1 becasue
-        # the sound speed on air (343.2 m/s), that It's equivalent to
-        # 0.34320 mm/us that is 1mm each 2.91us
-        # pulse_time // 2 // 2.91 -> pulse_time // 5.82 -> pulse_time * 100 // 582 
-        mm = pulse_time * 100 // 582
-        return mm
-
-    def distance_cm(self):
-        """
-        Get the distance in centimeters with floating point operations.
-        It returns a float
-        """
-        pulse_time = self._send_pulse_and_wait()
-
-        # To calculate the distance we get the pulse_time and divide it by 2 
-        # (the pulse walk the distance twice) and by 29.1 becasue
-        # the sound speed on air (343.2 m/s), that It's equivalent to
-        # 0.034320 cm/us that is 1cm each 29.1us
-        cms = (pulse_time / 2) / 29.1
-        return cms
-
-    __version__ = '0.2.0'
-    __author__ = 'Roberto Sánchez'
-    __license__ = "Apache License 2.0. https://www.apache.org/licenses/LICENSE-2.0"
-
-    """
-    Driver to use the untrasonic sensor HC-SR04.
-    The sensor range is between 2cm and 4m.
-    The timeouts received listening to echo pin are converted to OSError('Out of range')
-    """
-    # echo_timeout_us is based in chip range limit (400cm)
-    def __init__(self, trigger_pin, echo_pin, echo_timeout_us=500*2*30):
-        """
-        trigger_pin: Output pin to send pulses
-        echo_pin: Readonly pin to measure the distance. The pin should be protected with 1k resistor
-        echo_timeout_us: Timeout in microseconds to listen to echo pin. 
-        By default is based in sensor limit range (4m)
-        """
-        self.echo_timeout_us = echo_timeout_us
-        # Init trigger pin (out)
-        self.trigger = machine.Pin(trigger_pin, mode=machine.Pin.OUT, pull=None)
-        self.trigger.value(0)
-
-        # Init echo pin (in)
-        self.echo = machine.Pin(echo_pin, mode=machine.Pin.IN, pull=None)
-
-    def _send_pulse_and_wait(self):
-        """
-        Send the pulse to trigger and listen on echo pin.
-        We use the method `machine.time_pulse_us()` to get the microseconds until the echo is received.
-        """
-        self.trigger.value(0) # Stabilize the sensor
-        time.sleep_us(5)
-        self.trigger.value(1)
-        # Send a 10us pulse.
-        time.sleep_us(10)
-        self.trigger.value(0)
-        try:
-            pulse_time = machine.time_pulse_us(self.echo, 1, self.echo_timeout_us)
-            return pulse_time
-        except OSError as ex:
-            if ex.args[0] == 110: # 110 = ETIMEDOUT
-                raise OSError('Out of range')
-            raise ex
-
-    def distance_mm(self):
-        """
-        Get the distance in milimeters without floating point operations.
-        """
-        pulse_time = self._send_pulse_and_wait()
-
-        # To calculate the distance we get the pulse_time and divide it by 2 
-        # (the pulse walk the distance twice) and by 29.1 becasue
-        # the sound speed on air (343.2 m/s), that It's equivalent to
-        # 0.34320 mm/us that is 1mm each 2.91us
-        # pulse_time // 2 // 2.91 -> pulse_time // 5.82 -> pulse_time * 100 // 582 
-        mm = pulse_time * 100 // 582
-        return mm
-
-    def distance_cm(self):
-        """
-        Get the distance in centimeters with floating point operations.
-        It returns a float
-        """
-        pulse_time = self._send_pulse_and_wait()
-
-        # To calculate the distance we get the pulse_time and divide it by 2 
-        # (the pulse walk the distance twice) and by 29.1 becasue
-        # the sound speed on air (343.2 m/s), that It's equivalent to
-        # 0.034320 cm/us that is 1cm each 29.1us
-        cms = (pulse_time / 2) / 29.1
-        return cms
-```
+Here is a small example for reading a [HCSR04](https://github.com/andrey-git/micropython-hcsr04/blob/master/hcsr04.py) ultrasonic range sensor.
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_sensor.jpg" alt="Ultrasonic range sensor" width=200>
 
@@ -365,7 +218,6 @@ while True:
 
 Scenario 2
 ==========
-
 The example below shows you how to transer data from the ESP8266 to a [mosquitto](https://mosquitto.org/) server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol.
 ```
 from umqtt.simple import MQTTClient
@@ -385,7 +237,7 @@ config = {"dns": "8.8.8.8",
           "nodeId": "shelf_right",
           "subnet": "255.255.255.0",
           "wifiPass": "passwd",
-          "wifiSSID": "iothub"}
+          "wifiSSID": "iot_gateway"}
 
 def wifi_connect(config):
     print('connecting to %s' % config["wifiSSID"])
@@ -465,7 +317,30 @@ But if you have many sensors and ESP8266 around a Wi-Fi gateway is a great solut
 
 Use the following commands on the Raspberry Pi to turn it into an IoT gateway:
 ```
-sudo apt install -y mosquitto hostapd
+sudo apt install -y mosquitto hostapd tmux
+```
+
+Add this line to your /etc/rc.local
+```
+tmux new-session -d -s wifi 'while true; do rfkill unblock 0 ; ifconfig wlan0 192.168.0.1; hostapd -f /home/pi/hostapd.log -i wlan0 /etc/hostapd/hostapd.conf; sleep 10;done'
+```
+
+Contents of /etc/hostapd/hostapd.conf
+```
+driver=nl80211
+ctrl_interface=/var/run/hostapd
+ctrl_interface_group=0
+beacon_int=100
+auth_algs=1
+wpa_key_mgmt=WPA-PSK
+ssid=iot_gateway
+channel=1
+hw_mode=g
+wpa_passphrase=ChangeMe
+interface=wlan0
+wpa=2
+wpa_pairwise=CCMP
+country_code=nl
 ```
 
 Demo time
