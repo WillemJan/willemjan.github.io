@@ -93,7 +93,7 @@ There are several ways of communicating with the microcontroller, once deployed.
 
 - Scenario 1) Via serial communication using the USB-connection.
 - Scenario 2) Via Wi-Fi.
-- Scenario 3) By other means, like the SPI bus, GMS module (Not covered in this blog).
+- Scenario 3) By other means, like the SPI, GSM, LORA (Not covered in this blog).
 
 The first step is to erase and flash new firmware onto the ESP8266 device. Firmware is the software that runs on the microcontroller once it is powered, and it's called firmware because you are not able to modify it once written to the chip without interrupting the whole system.
 
@@ -251,8 +251,7 @@ def wifi_connect(config):
 
     sta.connect(config['wifiSSID'],
                 config['wifiPass'])
-
-	time.sleep(1)
+    time.sleep(1)
     print('connected to %s' % config["wifiSSID"])
 
 def main(server=config['mosquito_server'], hc):
@@ -263,27 +262,26 @@ def main(server=config['mosquito_server'], hc):
     loop = True
 
     while loop:
-		try:
-			distance_cm = hc.distance_cm()
-		    client.publish(b"distance_right", ("%i" % distance_cm).encode("utf-8"))
-		except:
-			loop = False
-
+        try:
+            distance_cm = hc.distance_cm()
+            client.publish(b"distance_right", ("%i" % distance_cm).encode("utf-8"))
+        except:
+            loop = False
     c.disconnect()
 
 if __name__ == "__main__":
     hc = HCSR04(5, 4)
-	wifi_connect(config)
-	error = 0
+    wifi_connect(config)
+    error = 0
 
-	while True:
-		if error > 1:
-			wifi_connect(config)
-			error = 0
-		try:
-			main(config, hc)
-		except:
-			error += 1
+    while True:
+        if error > 1:
+            wifi_connect(config)
+            error = 0
+        try:
+            main(config, hc)
+        except:
+            error += 1
 
 ```
 
@@ -313,7 +311,10 @@ The data will be processed on the Raspberry Pi, from your internal network you w
 
 Whilst many solutions I've studied on the Internet propagate the idea of exposing your microcontrollers directly to the Internet, I think this is a bad idea from a security and privacy standpoint. Sure it has some advantages, but they outweigh my concerns of getting hacked or data fed into some cloud infra. An other option I've seen is connecting a ESP8266 via Wi-Fi to a smartphone, which is as [dangerous](https://edwardsnowden.substack.com/p/ns-oh-god-how-is-this-legal) as it gets. The ESP8266 itself is a perfect tool for [deauthing](https://github.com/SpacehuhnTech/esp8266_deauther) Wi-Fi networks, but that's a subject on it's own.
 
-But if you have many sensors and ESP8266 around a Wi-Fi gateway is a great solution for connection all the devices.
+
+Scenario 2
+==========
+But if you have many sensors and ESP8266 around a Wi-Fi access point is a great solution for connection all the devices.
 
 Use the following commands on the Raspberry Pi to turn it into an IoT gateway:
 ```
@@ -322,7 +323,7 @@ sudo apt install -y mosquitto hostapd tmux
 
 Add this line to your /etc/rc.local
 ```
-tmux new-session -d -s wifi 'while true; do rfkill unblock 0 ; ifconfig wlan0 192.168.0.1; hostapd -f /home/pi/hostapd.log -i wlan0 /etc/hostapd/hostapd.conf; sleep 10;done'
+tmux new-session -d -s wifi 'while true; do rfkill unblock 0; ifconfig wlan0 192.168.0.1; hostapd -f /home/pi/hostapd.log -i wlan0 /etc/hostapd/hostapd.conf; sleep 1; done'
 ```
 
 Contents of /etc/hostapd/hostapd.conf
@@ -343,7 +344,15 @@ wpa_pairwise=CCMP
 country_code=nl
 ```
 
+This will start an Access Point, to which the ESP8266 can connect.
+
 Demo time
 ---------
+I’ve done some work on an interactive bookshelf as the (beta)final product. The first step is to create an index of all the books on the shelf. Next align the index of the books to physical location of the books (using a ultrasonic range sensor), and add a RGB-led strip above the books. Once a book is fetched from the shelf, by using the position information you can now show additional data about the book, and trigger other actions.
 
-I’ve done some work on an interactive bookshelf as the (beta)final product. The first step is to create an index of all the books on the shelf. Next align the index of the books to physical location of the books (using a ultrasonic range sensor), and add a RGB-led strip above the books.
+Calibration
+===========
+
+
+
+
