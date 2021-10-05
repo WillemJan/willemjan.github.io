@@ -402,11 +402,10 @@ Calibration
 -----------
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/calibration.png" alt="Calibration">
 
-For calibration I've used a little [pygame](https://www.pygame.org/) interface, the ESP8266 are using a serial (scenario 1) connection in this example. Because in my setup two ultrasonic range sensors are aligned up, they will allways interfer (from picking up the wrong signals) and this spit out semi-random data, during calibration if a book is fetched, it will noise-cancel out the two interfearing sensors. If we get a stable reading 8 times in a row, we will know the position of the book.
+For calibration I've used a little [pygame](https://www.pygame.org/) interface, the ESP8266 are using a serial (scenario 1) connection in this example. Because in my setup two ultrasonic range sensors are aligned up, they will allways interfer (from picking up the wrong signals) and will spit out semi-random data, during calibration if a book is fetched, it will noise-cancel out the two interfearing sensors. If we get a stable reading 8 times in a row, we will know the position of the book.
 The position information on the book can later be used to trigger action's when the book ik fetched from the shelf.
 
 [![Bookshelf calibration](https://res.cloudinary.com/marcomontalbano/image/upload/v1633427216/video_to_markdown/images/youtube--LTxu2Oq2EkE-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=LTxu2Oq2EkE "Bookshelf calibration")
-
 ```
 #!/usr/bin/env python3
 
@@ -519,3 +518,59 @@ for book in bookshelf_contents:
 with open('booklist_alignd.json', 'w') as fh:
     fh.write(json.dumps(book_align))
 ```
+
+After Calibration you will have the extra element 'pos' available in the json file.
+
+```
+   [{
+      "Authors" : [
+         "Kief Morris"
+      ],
+      "pos" : [
+         35,
+         37
+      ],
+      "Language" : "en",
+      "Year" : "2016",
+      "ISBN-13" : "9781491924358",
+      "Title" : "Infrastructure As Code - Managing Servers In The Cloud",
+      "Publisher" : "O'Reilly Media"
+   },
+   {
+      "Language" : "en",
+      "Title" : "Beyond The Basic Stuff With Python - Best Practices For Writing Clean Code",
+      "Publisher" : "No Starch Press",
+      "Year" : "2020",
+      "ISBN-13" : "9781593279660",
+      "Authors" : [
+         "Al Sweigart"
+      ],
+      "pos" : [
+         38,
+         34
+      ]
+   },
+   {
+      "ISBN-13" : "9781718500747",
+      "Year" : "2021",
+      "Title" : "Practical Deep Learning With Python - A Hands-On Introduction",
+      "Publisher" : "No Starch Press",
+      "Language" : "en",
+      "pos" : [
+         41,
+         30
+      ],
+      "Authors" : [
+         "Ron Kneusel"
+      ]
+   }]
+```
+
+Demo
+----
+
+For the final demo I will use the same setup, and fetch books from the shelf, this allows me to show the metadata about the book I've fetched directly onto the screen. I did not setup text-to-speech, but this is verry easy to do, and would make your shelf very accabicle for people with a visual handicap, using [mbrola](https://www.raspberrypi.org/forums/viewtopic.php?p=1099015). Also you could get creative and display other stats then I did, like how many times was the book fetched, and reading time, or if you like play some music that goes well with the book you fetched.
+
+
+
+
