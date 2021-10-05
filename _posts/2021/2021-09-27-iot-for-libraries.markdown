@@ -13,14 +13,14 @@ IoT for libraries
 
 Overview
 =================
-As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how to deploy these. The Internet of Things (IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think that a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
+As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how to deploy these. The Internet of Things (IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
 During lockdown I had time to experiment with a lot of (bare-bone) IoT devices, and I will share my IoT-setup here.
 
 <img src="https://s3.eu-central-1.amazonaws.com/centaur-wp/econsultancy/prod/content/uploads/archive/images/resized/0008/6869/atlas_bjsmcfal_2x-blog-flyer.png" alt="Cost of sensors">
 
 What's in it for me
 -------------------
-Whether your a teacher a librarian or a hacker, in this blog I will try to show you how sensors could be deployed in your environment.  
+Whether your a teacher a librarian or a hacker, in this blog I will try to show you how sensors could be deployed in your environment.
 
 If you don't have a technical background, some parts of this blog might be hard to understand, I suggest you skip all code parts, and read it anyway to get a little understanding of what all the buzz about Internet of Things is all about.
 Since the cost of the devices that are at the core of this revolution (microcontrollers) are now dirt-cheap, it's hard to get devices without them, yes, even your toothbrush will be equipped with these kind of technologies.
@@ -28,8 +28,9 @@ Often these devices will be labeled 'smart', what's meant here is that they are 
 
 <img src="https://whatsgoodtodo.com/wp-content/uploads/2019/03/PlaybrushSmartSonic.png" alt="Smart toothbush">  
 
-A good article about other experiments done inside a actual library appeared in code4lib Issue 38, 2017-10-18.
+A good article about other experiments done inside a actual library with sensors appeared in code4lib Issue 38, 2017-10-18.
 [Code4Lib Testing Three Types of Raspberry Pi People Counters](https://journal.code4lib.org/articles/12947)
+I will take a different angle using the same kind of sensors, and explain why.
 
 Let's start with the definition IoT devices are. I'm a fan of Wikipedia so here is the obligatory quote:
 
@@ -37,7 +38,6 @@ Let's start with the definition IoT devices are. I'm a fan of Wikipedia so here 
 
 To further narrow down what this blog is about, the IoT industry is huge, there are roughly two top classes by which to divide the IoT world in, IIot and Iot. The extra I in IIot comes from Industry, in this domain the equipment used is more robust, accurate and secure then the equipment used at home. During my education I was exposed to the IIoT side of things, back then these where not even called IoT devices but Programmable Logic Controllers(PLC's). The equipment we used in class was goes by the name of [Adam](https://www.advantech.com/products/modular-i-o-system-adam-5000-series/sub_7a806b75-2b4f-4a04-ae12-270d79a9a6cd). The idea's behind PLC's kindof evolved into IIoT, as these techniques where the driver behind the the third industrial revolution. Mayor companies like Siemens now brand their product as [IIOT](https://siemens.mindsphere.io/en/industrial-iot).
 For the home user a lot of stuff sold as IoT works out of the box, setup-procedures are super simple, mostly the device want's to somehow get access to the Internet so you must give it access to your Wi-Fi network, and batta bing your device works. In this blog I will try to explain in detail how this works (Without sending your data to 3rd-parties), and how you can create your own IoT setup.
-
 
 Let's get technical
 ===================
@@ -400,12 +400,12 @@ I've manualy added some extra metadata like "Image" and "Abstract".
 
 Calibration
 -----------
-
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/calibration.png" alt="Calibration">
 
 For calibration I've used a little [pygame](https://www.pygame.org/) interface, the ESP8266 are using a serial (scenario 1) connection in this example. Because in my setup two ultrasonic range sensors are aligned up, they will allways interfer (from picking up the wrong signals) and this spit out semi-random data, during calibration if a book is fetched, it will noise-cancel out the two interfearing sensors. If we get a stable reading 8 times in a row, we will know the position of the book.
 The position information on the book can later be used to trigger action's when the book ik fetched from the shelf.
 
+[![Bookshelf calibration](https://res.cloudinary.com/marcomontalbano/image/upload/v1633427216/video_to_markdown/images/youtube--LTxu2Oq2EkE-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=LTxu2Oq2EkE "Bookshelf calibration")
 
 ```
 #!/usr/bin/env python3
