@@ -60,6 +60,10 @@ The general idea here is this:
 
 Sensor -> Microcontroller -> Raspberry Pi
 
+In this setup your sensor is allways able to talk to the microcontroller, if you hookup sensors to your Raspberry Pi you might experience lags while accessing the data (If your Pi is for example running background processs, or an software update).
+Using the MicroPython distribution you are running the microcontroller dedicated in embedded (realtime) mode, this will ensure no lags will happen, there are no big background processes running on the controller.
+
+
 Sensors
 =======
 Let's start with the sensor part. There are a lot of things you can measure with sensors, ranging from simple switches to water-levels, radar sensors, CO2 sensors etc.
@@ -99,11 +103,18 @@ First install the required tools, firmware and create an initial empty boot.py f
 ```
 sudo apt install -y picocom esptool 
 pip3 install adafruit-ampy
+
+# We'll work in this project directory
 mkdir esp_8266
 cd esp_8266
 touch boot.py # For now make an empty boot.py, later you can fill this with code to read and transmit sensor data.
+
+# This is the firmware.
 wget 'http://micropython.org/resources/firmware/esp8266-20210902-v1.17.bin'
+
+# These are some handy external libraries.
 curl -s https://raw.githubusercontent.com/micropython/micropython-lib/master/micropython/urllib.urequest/urllib/urequest.py > ureq.py
+curl -s https://raw.githubusercontent.com/andrey-git/micropython-hcsr04/master/hcsr04.py > hcsr04.py
 ```
 Once the microcontroller boots, it will run the firmware (Which contains a version of MicroPython) and execute the boot.py file. In this file we will put the logic needed to read data from the attached sensors.
 
@@ -145,6 +156,7 @@ esptool.py --port /dev/ttyUSB0 erase_flash
 esptool.py --port /dev/ttyUSB0 --baud 115200 write_flash --flash_size=detect 0 esp8266-20210902-v1.17.bin
 
 ampy  -p /dev/ttyUSB0 put boot.py
+ampy  -p /dev/ttyUSB0 put hcsr04.py
 ampy  -p /dev/ttyUSB0 ls
 ampy  -p /dev/ttyUSB0 mkdir urequests
 ampy  -p /dev/ttyUSB0 put ureq.py /urequests/__init__.py
@@ -158,8 +170,6 @@ Scenario 1
 ----------
 Using the serial connection you will be able te transfer data very reliable, but not as fast as over Wi-Fi (2.7 mega bits/sec) according to this [load tesing an esp8266](https://arunoda.me/blog/load-testing-an-esp8266).
 But for low-latency and high reliability/security data transfer a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port (cable length <5M) and this works like a charm.
-
-<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_schem.jpg" alt="Ultrasonic range sensor schematics">  
 
 Installing pyserial:
 ```
@@ -190,34 +200,38 @@ sta_if.active(False)
 ap_if = network.WLAN(network.AP_IF)
 ap_if.active(False)
 ```
-An AP is normaly used to connect to, you can do nice things with this option, like update the firmware and run a web-server on the ESP8266, but for this blog I will not explore this scenario.
+An AP is normaly used to connect to, you can do nice things with this option, like update the firmware and run a web-server on the ESP8266, but for this blog I will not explore these scenario's.
 
 I prefer to let the ESP8266 send data, rather then having the Raspberry Pi poll all the ESP8266's deployed, so I recommend turning off the access point (Which will by default show up something like 'MicroPython-2884894' in your Wi-Fi network list).
 In order to do this, the last 2 lines of the code-snippet above will have to run first, before starting the main loop, add them to the boot.py file.
 
+<img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_schem.jpg" alt="Ultrasonic range sensor schematics">  
+
 The final result, reading the Ultrasonic range sensor will look something like this:
 ```
+import time
 import network
+import hcsr04
 
 sta_if = network.WLAN(network.STA_IF)
 sta_if.active(False)
 ap_if = network.WLAN(network.AP_IF)
 ap_if.active(False)
 
-hc = HCSR04(5, 4)
+hc = hcsr04.HCSR04(5, 4)
 
 while True:
     try:
         distance_cm = hc.distance_cm()
-        print(distance_cm)
+        print("Left sensor", distance_cm)
+        time.sleep(0.1)
     except:
         pass
 ```
 
 Scenario 2
 ----------
-The example below shows you how to transer data from the ESP8266 to a [mosquitto](https://mosquitto.org/) server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol. The example measures the distance to an object using the a ultrasonic range sensor.
-
+The example below shows you how to transer data from the ESP8266 to a [mosquitto](https://mosquitto.org/) server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol. The example measures the distance to an object using the a ultrasonic range sensor. To be able to run this, I will explain howto setup a Raspberry Pi as a IoT-gateway later in this blog.
 
 ```
 from umqtt.simple import MQTTClient
@@ -226,9 +240,7 @@ import machine
 import network
 import time
 import ujson
-
-# include this class:
-# https://raw.githubusercontent.com/andrey-git/micropython-hcsr04/master/hcsr04.py
+import hcsr04
 
 ap = network.WLAN(network.AP_IF)
 ap.active(False)
@@ -273,7 +285,7 @@ def main(server=config['mosquito_server'], hc):
     c.disconnect()
 
 if __name__ == "__main__":
-    hc = HCSR04(5, 4)
+    hc = hcsr04.HCSR04(5, 4)
     wifi_connect(config)
     error = 0
 
@@ -285,7 +297,6 @@ if __name__ == "__main__":
             main(config, hc)
         except:
             error += 1
-
 ```
 
 Raspberry Pi
@@ -392,7 +403,10 @@ Calibration
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/calibration.png" alt="Calibration">
 
-For calibration I've used a little [pygame](https://www.pygame.org/) interface, the ESP8266 are using a serial connection in this example:
+For calibration I've used a little [pygame](https://www.pygame.org/) interface, the ESP8266 are using a serial (scenario 1) connection in this example. Because in my setup two ultrasonic range sensors are aligned up, they will allways interfer (from picking up the wrong signals) and this spit out semi-random data, during calibration if a book is fetched, it will noise-cancel out the two interfearing sensors. If we get a stable reading 8 times in a row, we will know the position of the book.
+The position information on the book can later be used to trigger action's when the book ik fetched from the shelf.
+
+
 ```
 #!/usr/bin/env python3
 
@@ -464,7 +478,7 @@ for book in bookshelf_contents:
         if all_reading:
             if res in all_reading:
                 all_reading.append(res)
-                if len(all_reading) == 5:
+                if len(all_reading) == 8: # BAM! done.
                     left_done = True
             else:
                 all_reading = []
@@ -489,7 +503,7 @@ for book in bookshelf_contents:
         if all_reading:
             if res in all_reading:
                 all_reading.append(res)
-                if len(all_reading) == 5:
+                if len(all_reading) == 8: # BAM! done.
                     right_done = True
             else:
                 all_reading = []
