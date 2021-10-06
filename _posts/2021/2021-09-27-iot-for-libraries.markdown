@@ -358,7 +358,13 @@ wpa_pairwise=CCMP
 country_code=nl
 ```
 
-This will start an Access Point, to which the ESP8266 can connect.
+This will start an Access Point, to which the ESP8266 can connect. For recieving, a Mosquitto server is a nice way of recieving data from lot's of IoT devices. It's pretty easy to install and to interact with, install it on the Raspberry Pi like this:
+
+```
+sudo apt install -y mosquitto mosquitto-dev
+# To change the IP-number to bind to create a default.conf here: /etc/mosquitto/conf.d 
+echo "listener 1883 192.168.0.1" >> /etc/mosquitto/conf.d/default.conf
+```
 
 Bookshelf demo
 ==============
@@ -569,7 +575,7 @@ After Calibration you will have the extra element 'pos' available in the json fi
 Demo
 ----
 
-For the final demo I will use the same setup, and fetch books from the shelf, this allows me to show the metadata about the book I've fetched directly onto the screen. I did not setup text-to-speech, but this is verry easy to do, and would make your shelf very accabicle for people with a visual handicap, using [mbrola](https://www.raspberrypi.org/forums/viewtopic.php?p=1099015). Also you could get creative and display other stats then I did, like how many times was the book fetched, and reading time, or if you like play some music that goes well with the book you fetched.
+For the final demo I will use the same setup, and fetch books from the shelf, this allows me to show the metadata about the book I've fetched directly onto the screen. I did not setup text-to-speech, but this is very easy to do, and would make your shelf very accessible for people with a visual handicap, using [mbrola](https://www.raspberrypi.org/forums/viewtopic.php?p=1099015). Also you could get creative and display other stats then I did, like how many times was the book fetched, and reading time, or if you like play some music that goes well with the book you fetched.
 
 
 
