@@ -82,7 +82,7 @@ Here is a small MicroPython example for reading a [HCSR04](https://github.com/an
 Microcontrollers
 ================
 I've tested several devices for this purpose, and the thing I like best and is the ESP8266 used in the [NodeMCU](https://en.wikipedia.org/wiki/NodeMCU).
-For all experiments I used (Raspberry Pi OS Lite)[https://www.raspberrypi.com/software/operating-systems/] and python3 to communicate with the ESP8266 microcontroller, but this can also be done from any system with a USB-port and a UNIX like operating system.
+For all experiments I used [Raspberry Pi OS Lite](https://www.raspberrypi.com/software/operating-systems/) and Python3 to communicate with the ESP8266 microcontroller, but this can also be done from any system with a USB-port and a UNIX like operating system.
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/esp8266.png" alt="ESP8266 controller">
 
@@ -100,8 +100,11 @@ The first step is to erase and flash new firmware onto the ESP8266 device. Firmw
 
 First install the required tools, firmware and create an initial empty boot.py file.
 ```
+# Tools for putting firmware on the ESP8266
 sudo apt install -y picocom esptool 
-pip3 install adafruit-ampy
+
+# Tools for putting files on the ESP8266
+sudo pip3 install adafruit-ampy
 
 # We'll work in this project directory
 mkdir esp_8266
@@ -122,7 +125,7 @@ Note that esptool may be outdated, if you get weird errors during invocation, us
 sudo apt remove -y esptool
 sudo pip3 install esptool
 ```
-See this page for more info on the MicroPython [firmware](http://micropython.org/download/esp8266/), and the github page for the [esptool](https://github.com/espressif/esptool)
+See this page for more info on the MicroPython [firmware](http://micropython.org/download/esp8266/), and the Github page for the [esptool](https://github.com/espressif/esptool)
 
 Attach your ESP8266 to your USB-port of choice, and verify the connection by identifying the chip:
 ```
@@ -154,12 +157,18 @@ Next is creating a little flash & disaster recovery script:
 esptool.py --port /dev/ttyUSB0 erase_flash
 esptool.py --port /dev/ttyUSB0 --baud 115200 write_flash --flash_size=detect 0 esp8266-20210902-v1.17.bin
 
-ampy  -p /dev/ttyUSB0 put boot.py
+# ampy can be used to interact with the file-system on the ESP8266.
+ampy  -p /dev/ttyUSB0 put boot.py 
+# The boot.py file is invoked once the ESP8266 boots.
+
+# Some external libraries are required.
 ampy  -p /dev/ttyUSB0 put hcsr04.py
-ampy  -p /dev/ttyUSB0 ls
 ampy  -p /dev/ttyUSB0 mkdir urequests
 ampy  -p /dev/ttyUSB0 put ureq.py /urequests/__init__.py
+
+# Verify that code is transmitted and written.
 ampy  -p /dev/ttyUSB0 get boot.py
+ampy  -p /dev/ttyUSB0 ls
 
 picocom --baud 115200 /dev/ttyUSB0 # This will create a connection to your ESP, to quit press CTRL-a, CTRL-x
 ```
