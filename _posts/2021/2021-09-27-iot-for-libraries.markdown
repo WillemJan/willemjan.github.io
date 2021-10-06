@@ -29,8 +29,8 @@ Often these devices will be labeled 'smart', what's meant here is that they are 
 <img src="https://whatsgoodtodo.com/wp-content/uploads/2019/03/PlaybrushSmartSonic.png" alt="Smart toothbush">  
 
 A good article about other experiments done inside a actual library with sensors appeared in code4lib Issue 38, 2017-10-18.
-[Code4Lib Testing Three Types of Raspberry Pi People Counters](https://journal.code4lib.org/articles/12947)
-I will take a different angle using the same kind of sensors, and explain why.
+[Code4Lib Testing Three Types of Raspberry Pi People Counters](https://journal.code4lib.org/articles/12947).
+In this blog I will take different angle using the same kind of sensors, and explain why.
 
 Let's start with the definition IoT devices are. I'm a fan of Wikipedia so here is the obligatory quote:
 
@@ -61,8 +61,7 @@ The general idea here is this:
 Sensor -> Microcontroller -> Raspberry Pi
 
 In this setup your sensor is allways able to talk to the microcontroller, if you hookup sensors to your Raspberry Pi you might experience lags while accessing the data (If your Pi is for example running background processs, or an software update).
-Using the MicroPython distribution you are running the microcontroller dedicated in embedded (realtime) mode, this will ensure no lags will happen, there are no big background processes running on the controller.
-
+Using the MicroPython distribution you are running the microcontroller dedicated in embedded (realtime) mode, this will ensure no lags will happen, there are no big background processes running on the controller. The ultrasonic range sensor I will use later on is not super stable, but using the microcontroller it will gain stability, and enable different ways of transmitting data.
 
 Sensors
 =======
@@ -83,7 +82,7 @@ Here is a small MicroPython example for reading a [HCSR04](https://github.com/an
 Microcontrollers
 ================
 I've tested several devices for this purpose, and the thing I like best and is the ESP8266 used in the [NodeMCU](https://en.wikipedia.org/wiki/NodeMCU).
-For all experiments I used Debian 10.10 (Buster) on my laptop and python3 to communicate with the ESP8266 microcontroller, but this can also be done from the Raspberry PI.
+For all experiments I used (Raspberry Pi OS Lite)[https://www.raspberrypi.com/software/operating-systems/] and python3 to communicate with the ESP8266 microcontroller, but this can also be done from any system with a USB-port and a UNIX like operating system.
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/esp8266.png" alt="ESP8266 controller">
 
