@@ -13,7 +13,7 @@ IoT for libraries
 
 Overview
 =================
-As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how to deploy these. The Internet of Things (IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
+As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how-to deploy these. The Internet of Things (IoT) landscape is riddled with commercial companies that want to gather as much data as they can, while I think a library thrives on privacy. My advise for any library that want's to deploy a massive IoT-network, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
 During lockdown I had time to experiment with a lot of (bare-bone) IoT devices, and I will share my IoT-setup here.
 
 <img src="https://s3.eu-central-1.amazonaws.com/centaur-wp/econsultancy/prod/content/uploads/archive/images/resized/0008/6869/atlas_bjsmcfal_2x-blog-flyer.png" alt="Cost of sensors">
@@ -42,7 +42,7 @@ For the home user a lot of stuff sold as IoT works out of the box, setup-procedu
 Let's get technical
 ===================
 There are a lot of good resources on the Internet about how-to setup your own IoT landscape, so making the right choices is important.
-My weapon of choice for setting thins up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/) or how to hookup IoT to the cloud.
+My weapon of choice for setting thins up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/) or how-to hookup IoT to the cloud.
 
 Last warning, this a very DIY!
 
@@ -70,7 +70,7 @@ Let's start with the sensor part. There are a lot of things you can measure with
 To explore a wide range of possibilities I suggest getting a sensor-kit, something like this:
 ![Sensor kit example](https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/sensor-kit.jpg)  
 
-Most of these sensor have been tested with MicroPython and tutorials on how to connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
+Most of these sensor have been tested with MicroPython and tutorials on how-to connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
 In order to attach the sensors to a ESP8266 you will need some wire, I recommend getting some [DuPont wire](https://en.wikipedia.org/wiki/Jump_wire) (Female to Female).
 
 Many kind of sensors sense the real-world and send digital information right back to the microcontroller. In order to make sense of what the sensor is measuring often a calculation step is needed, or some logic to enhance what the sensor is reporting back to the Raspberry Pi. Most (basic) sensors require three wires running from the microcontroller to the sensor, these are power, ground and a data-line (sensor output).
@@ -230,7 +230,7 @@ while True:
 
 Scenario 2
 ----------
-The example below shows you how to transer data from the ESP8266 to a [mosquitto](https://mosquitto.org/) server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol. The example measures the distance to an object using the a ultrasonic range sensor. To be able to run this, I will explain howto setup a Raspberry Pi as a IoT-gateway later in this blog.
+The example below shows you how-to transer data from the ESP8266 to a [mosquitto](https://mosquitto.org/) server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol. The example measures the distance to an object using the a ultrasonic range sensor. To be able to run this, I will explain howto setup a Raspberry Pi as a IoT-gateway later in this blog.
 
 ```
 from umqtt.simple import MQTTClient
