@@ -332,7 +332,10 @@ If you have many sensors and ESP8266 around a Wi-Fi access point is a great solu
 
 Use the following commands on the Raspberry Pi to turn it into an IoT access point / gateway:
 ```
-sudo apt install -y mosquitto hostapd tmux
+sudo apt install -y hostapd tmux
+sudo apt install -y mosquitto mosquitto-dev
+# To change the IP-number to bind to create a default.conf here: /etc/mosquitto/conf.d 
+echo "listener 1883 192.168.0.1" >> /etc/mosquitto/conf.d/default.conf
 ```
 
 Add this line to your /etc/rc.local
@@ -358,13 +361,7 @@ wpa_pairwise=CCMP
 country_code=nl
 ```
 
-This will start an Access Point, to which the ESP8266 can connect. For recieving, a Mosquitto server is a nice way of recieving data from lot's of IoT devices. It's pretty easy to install and to interact with, install it on the Raspberry Pi like this:
-
-```
-sudo apt install -y mosquitto mosquitto-dev
-# To change the IP-number to bind to create a default.conf here: /etc/mosquitto/conf.d 
-echo "listener 1883 192.168.0.1" >> /etc/mosquitto/conf.d/default.conf
-```
+Your IoT clients must set their IP manualy to the 192.168.0.1-255 range in order to talk to the mosquitto server.
 
 Bookshelf demo
 ==============
