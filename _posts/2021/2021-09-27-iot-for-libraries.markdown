@@ -409,171 +409,45 @@ For calibration I've used a little [pygame](https://www.pygame.org/) interface, 
 The position information on the book can later be used to trigger action's when the book ik fetched from the shelf.
 
 [![Bookshelf calibration](https://res.cloudinary.com/marcomontalbano/image/upload/v1633427216/video_to_markdown/images/youtube--LTxu2Oq2EkE-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=LTxu2Oq2EkE "Bookshelf calibration")
-```
-#!/usr/bin/env python3
 
-import contextlib # stackoverflow.com/q/51464455
-with contextlib.redirect_stdout(None):
-    import pygame
+The code for calibration is available on [github](https://gist.github.com/WillemJan/1fb88f96bdcfa779284a10109c7a00e8).
 
-import json
-import time
-import serial
-
-import requests
-import io
-
-'''
-pi@shelf:~ $ xrandr  | head -1
-Screen 0: minimum 320 x 200, current 1680 x 1050, maximum 2048 x 2048
-'''
-
-SCREEN_WIDTH = 1680
-SCREEN_HEIGHT = 1050
-
-SENSOR_LEFT = "/dev/ttyUSB1"
-SENSOR_RIGHT = "/dev/ttyUSB0"
-
-pygame.init()
-
-screen = pygame.display.set_mode((1680, 1050), pygame.FULLSCREEN)
-
-with open('booklist.json') as booklist_file:
-    bookshelf_contents = json.loads(booklist_file.read())
-
-font = pygame.font.SysFont('Verdana', 50)
-
-left_c = right_c = -1
-book_align = []
-
-for book in bookshelf_contents:
-    screen.fill((0, 0, 0))
-    img = font.render("Calibration time..", True, (200, 200, 200))
-    screen.blit(img, (40, 100))
-    img = font.render("Please fetch: ", True, (200, 200, 200))
-    screen.blit(img, (40, 100 + img.get_height() + 4))
-
-    if not book.get('Title'):
-        continue
-    img = font.render(book['Title'].split(' - ')[0], True, (100,200,100))
-    screen.blit(img, ((SCREEN_WIDTH /3), 120))
-
-    img = font.render(book['Year'].split(' - ')[0], True, (100,200,100))
-    screen.blit(img, ((SCREEN_WIDTH /3), 170))
-
-    img = font.render(book['Publisher'].split(' - ')[0], True, (100,200,100))
-    screen.blit(img, ((SCREEN_WIDTH /3), 220))
-    
-    pygame.display.flip()
-
-    ser = serial.Serial(SENSOR_LEFT, 115200)
-    all_reading = []
-
-    left_done = False
-    while not left_done:
-        left = ser.readline().decode("utf-8").strip()
-        try:
-            res = int(left.split(' ')[1])
-        except:
-            res = left_c 
-        print('left', res, all_reading, len(all_reading), left_c)
-        if all_reading:
-            if res in all_reading:
-                all_reading.append(res)
-                if len(all_reading) == 8: # BAM! done.
-                    left_done = True
-            else:
-                all_reading = []
-        else:
-            if not res == left_c:
-                all_reading.append(res)
-
-    print("left done!", all_reading)
-    left_c = all_reading.pop()
-
-    ser = serial.Serial(SENSOR_RIGHT, 115200)
-    all_reading = []
-    right_done = False
-
-    while not right_done:
-        right = ser.readline().decode("utf-8").strip()
-        try:
-            res = int(right.split(' ')[1])
-        except:
-            res = right_c
-        print('right', res, all_reading, len(all_reading), right_c)
-        if all_reading:
-            if res in all_reading:
-                all_reading.append(res)
-                if len(all_reading) == 8: # BAM! done.
-                    right_done = True
-            else:
-                all_reading = []
-        else:
-            if not res == right_c:
-                all_reading.append(res)
-    print("right done!", all_reading)
-    right_c = all_reading.pop()
-
-    book['pos'] = (left_c, right_c)
-    book_align.append(book)
-
-with open('booklist_alignd.json', 'w') as fh:
-    fh.write(json.dumps(book_align))
-```
-
-After Calibration you will have the extra element 'pos' available in the json file.
+After Calibration you will have the extra element 'pos' available in the json file (booklist_alignd.json).
 
 ```
-   [{
-      "Authors" : [
-         "Kief Morris"
-      ],
-      "pos" : [
-         35,
-         37
-      ],
-      "Language" : "en",
-      "Year" : "2016",
-      "ISBN-13" : "9781491924358",
-      "Title" : "Infrastructure As Code - Managing Servers In The Cloud",
-      "Publisher" : "O'Reilly Media"
-   },
-   {
-      "Language" : "en",
-      "Title" : "Beyond The Basic Stuff With Python - Best Practices For Writing Clean Code",
-      "Publisher" : "No Starch Press",
-      "Year" : "2020",
-      "ISBN-13" : "9781593279660",
-      "Authors" : [
-         "Al Sweigart"
-      ],
-      "pos" : [
-         38,
-         34
-      ]
-   },
-   {
-      "ISBN-13" : "9781718500747",
-      "Year" : "2021",
-      "Title" : "Practical Deep Learning With Python - A Hands-On Introduction",
-      "Publisher" : "No Starch Press",
-      "Language" : "en",
-      "pos" : [
-         41,
-         30
-      ],
-      "Authors" : [
-         "Ron Kneusel"
-      ]
-   }]
+[{
+  "Authors" : [
+     "Kief Morris"
+  ],
+  "pos" : [
+     35,
+     37
+  ],
+  "Language" : "en",
+  "Year" : "2016",
+  "ISBN-13" : "9781491924358",
+  "Title" : "Infrastructure As Code - Managing Servers In The Cloud",
+  "Publisher" : "O'Reilly Media"
+},
+{
+  "Language" : "en",
+  "Title" : "Beyond The Basic Stuff With Python - Best Practices For Writing Clean Code",
+  "Publisher" : "No Starch Press",
+  "Year" : "2020",
+  "ISBN-13" : "9781593279660",
+  "Authors" : [
+     "Al Sweigart"
+  ],
+  "pos" : [
+     38,
+     34
+  ]
+}]
 ```
 
 Demo
 ----
 
 For the final demo I will use the same setup, and fetch books from the shelf, this allows me to show the metadata about the book I've fetched directly onto the screen. I did not setup text-to-speech, but this is very easy to do, and would make your shelf very accessible for people with a visual handicap, using [mbrola](https://www.raspberrypi.org/forums/viewtopic.php?p=1099015). Also you could get creative and display other stats then I did, like how many times was the book fetched, and reading time, or if you like play some music that goes well with the book you fetched.
-
-
 
 
