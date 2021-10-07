@@ -1,7 +1,7 @@
 ﻿---
 layout: post
 title: Internet of Things for libraries
-date: '2021-09-27 10:15'
+date: '2021-10-7 10:15'
 excerpt: Internet of Things for libraries
 comments: false
 ---
