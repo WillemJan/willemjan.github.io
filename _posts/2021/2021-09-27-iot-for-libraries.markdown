@@ -372,7 +372,7 @@ Your IoT clients must set their IP manually to the 192.168.0.1-255 range in orde
 
 Bookshelf demo
 ==============
-I’ve done some work on an interactive bookshelf as the (beta)final product. The first step is to create an index of all the books on the shelf. Next align the index of the books to physical location of the books (using a ultrasonic range sensor), and add a RGB-led strip above the books. Once a book is fetched from the shelf, by using the position information you can now show additional data about the book, and trigger other actions.
+I’ve done some work on an interactive bookshelf as the (beta)final product. The first step is to create an index of all the books on the shelf. Next align the index of the books to physical location of the books (using a ultrasonic range sensor), and add a [RGB-ledstrip](https://learn.adafruit.com/12mm-led-pixels/circuitpython-setup) above the books. Once a book is fetched from the shelf, by using the position information you can now show additional data about the book, and trigger other actions.
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/bookshelf1.jpg" alt="Bookshelf demo">
 
