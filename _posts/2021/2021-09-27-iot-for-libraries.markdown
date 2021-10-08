@@ -415,7 +415,7 @@ Calibration
 For calibration I've used a little pygame interface, the ESP8266 are using a serial (scenario 1) connection in this example. Because in my setup two ultrasonic range sensors are aligned up, they will allways interfere (from picking up the wrong signals) and will spit out semi-random data, during calibration if a book is fetched, it will noise-cancel out the two interfering sensors. If we get a stable reading 8 times in a row, we will know the position of the book.
 The position information on the book can later be used to trigger action's when the book is fetched from the shelf.
 
-[![Bookshelf calibration](https://res.cloudinary.com/marcomontalbano/image/upload/v1633427216/video_to_markdown/images/youtube--LTxu2Oq2EkE-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=LTxu2Oq2EkE "Bookshelf calibration")
+[![Bookshelf calibration](https://res.cloudinary.com/marcomontalbano/image/upload/v1633427216/video_to_markdown/images/youtube--LTxu2Oq2EkE-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=89a0hAoJ-tA "Bookshelf calibration")
 
 The code for calibration is available on [github](https://gist.github.com/WillemJan/1fb88f96bdcfa779284a10109c7a00e8).
 
@@ -454,4 +454,4 @@ After Calibration you will have the extra element 'pos' available in the json fi
 
 Demo
 ----
-For the final demo I will use the same setup, and fetch books from the shelf, this allows me to show the metadata about the book I've fetched directly onto the screen. I did not setup text-to-speech, but this is very easy to do, and would make your shelf very accessible for people with a visual handicap, using [mbrola](https://www.raspberrypi.org/forums/viewtopic.php?p=1099015). Also you could get creative and display other stats then I did, like how many times was the book fetched, and reading time, or if you like play some music that goes well with the book you fetched.
+For the final demo I will use the same setup, and fetch books from the shelf, this allows me to show the metadata about the book I've fetched directly onto the screen. For text-to-speech I'm using [espeak](https://linuxhint.com/command-line-text-speech-apps-linux/), this makes your shelf very accessible for people with a visual handicap. You could get creative and display other stats then I did, like how many times was the book fetched, and reading time, or if you like play some music that goes well with the book you fetched.
