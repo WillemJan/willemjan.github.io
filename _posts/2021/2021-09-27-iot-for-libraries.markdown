@@ -458,5 +458,4 @@ For the final demo I will use the same setup, and fetch books from the shelf, th
 
 [![Interactive bookshelf final demo](https://res.cloudinary.com/marcomontalbano/image/upload/v1633705928/video_to_markdown/images/youtube--RG5OGHnliKw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/RG5OGHnliKw "Interactive bookshelf final demo")
 
-
-
+The code for the interactive bookshelf is available on [github](https://gist.github.com/WillemJan/8f573fb24e80bf67629a93ce9c52c6db), share and enjoy!
