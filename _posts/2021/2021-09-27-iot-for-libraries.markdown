@@ -455,3 +455,8 @@ After Calibration you will have the extra element 'pos' available in the json fi
 Demo
 ----
 For the final demo I will use the same setup, and fetch books from the shelf, this allows me to show the metadata about the book I've fetched directly onto the screen. For text-to-speech I'm using [espeak](https://linuxhint.com/command-line-text-speech-apps-linux/), this makes your shelf very accessible for people with a visual handicap. You could get creative and display other stats then I did, like how many times was the book fetched, and reading time, or if you like play some music that goes well with the book you fetched.
+
+[![Interactive bookshelf final demo](https://res.cloudinary.com/marcomontalbano/image/upload/v1633705928/video_to_markdown/images/youtube--RG5OGHnliKw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/RG5OGHnliKw "Interactive bookshelf final demo")
+
+
+
