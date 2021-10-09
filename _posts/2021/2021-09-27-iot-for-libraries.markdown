@@ -10,7 +10,7 @@ comments: false
 
 Introduction
 =============
-This blog is an introduction to the Internet of Things (IoT), and will cover the technical aspects of working with digital-sensors and how they could be used in a library setting. I will work towards an [interactive bookshelf](https://www.youtube.com/watch?v=RG5OGHnliKw) that will spark the interest into browsing a bookshelf, and thus making a bookshelf less 'dusty'. Al tough this blog is very technical I will try to inform a general audience about the possibilities that the Internet of Things has to offer. The IoT revolution depends on having access to cheap sensors that are able to measure things in the real world, combining output from these sensors enables new solutions that where previously impossible.
+This blog is an introduction to the Internet of Things (IoT), and will cover the technical aspects of working with digital-sensors and how they could be used in a library setting. I will work towards an [interactive bookshelf](https://www.youtube.com/watch?v=RG5OGHnliKw) that will spark the interest into browsing a bookshelf, and thus making a bookshelf less 'dusty'. Although this blog is very technical I will try to inform a general audience about the possibilities that the Internet of Things has to offer. The IoT revolution depends on having access to cheap sensors that are able to measure things in the real world, combining output from these sensors enables new solutions that where previously impossible.
 
 
 Overview
