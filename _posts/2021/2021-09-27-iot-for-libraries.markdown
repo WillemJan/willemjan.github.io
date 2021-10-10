@@ -129,7 +129,7 @@ See this page for more info on the MicroPython [firmware](http://micropython.org
 
 Attach your ESP8266 to your USB-port of choice, and verify the connection by identifying the chip:
 ```
-esptool.py chip_id
+esptool chip_id
 ```
 
 If all is well the output will look something like this:
@@ -154,8 +154,8 @@ Next is creating a little flash & disaster recovery script:
 ```
 #!/usr/bin/env bash
 
-esptool.py --port /dev/ttyUSB0 erase_flash
-esptool.py --port /dev/ttyUSB0 --baud 115200 write_flash --flash_size=detect 0 esp8266-20210902-v1.17.bin
+esptool --port /dev/ttyUSB0 erase_flash
+esptool --port /dev/ttyUSB0 --baud 115200 write_flash --flash_size=detect 0 esp8266-20210902-v1.17.bin
 
 # ampy can be used to interact with the file-system on the ESP8266.
 ampy  -p /dev/ttyUSB0 put boot.py 
