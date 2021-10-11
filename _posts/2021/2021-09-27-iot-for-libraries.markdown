@@ -74,7 +74,7 @@ To explore a wide range of possibilities I suggest getting a sensor-kit, somethi
 <!-- Misschien ook een paar linkjes opnemen, want voor een geinteresseerde lezer die niet bekend is
 met sensor kits kan waarschijnlijk niet zo veel met alleen een plaatje?  -->
 
-Most of these sensor have been tested with MicroPython and tutorials on how-to connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
+Most of these sensor have been tested with MicroPython, and tutorials on how-to connect and operate these are widely available, as well as source code. MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
 In order to attach the sensors to a ESP8266 you will need some wire, I recommend getting some [DuPont wire](https://en.wikipedia.org/wiki/Jump_wire) (Female to Female).
 
 Many kind of sensors sense the real-world and send digital information right back to the microcontroller. In order to make sense of what the sensor is measuring often a calculation step is needed, or some logic to enhance what the sensor is reporting back to the Raspberry Pi. Most (basic) sensors require three wires running from the microcontroller to the sensor, these are power, ground and a data-line (sensor output).
