@@ -100,6 +100,11 @@ There are several ways of communicating with the microcontroller, once deployed.
 - Scenario 2) Via Wi-Fi.
 - Scenario 3) By other means, like the SPI, GSM, LORA (Not covered in this blog).
 
+<!-- In de paragrafen die volgen verwijs je verschillende keren (o.a. in de kopteksten) naar
+"Scenario 1"  en "Scenario 2". Ik zou i.p.v. die nummeraanduiding daarbij gewoon iets als
+"USB" en "Wi-Fi" vermelden i.p.v. die nummers. Want tegen de tijd dat ik nu bij de "Scenario 2"
+paragraaf ben aangeland, moet ik nu weer terugzoeken wat scenario 2 ook alweer inhoudt.-->
+
 The first step is to erase and flash new firmware onto the ESP8266 device. Firmware is the software that runs on the microcontroller once it is powered, and it's called firmware because you are not able to modify it once written to the chip without interrupting the whole system.
 
 First install the required tools, firmware and create an initial empty boot.py file.
