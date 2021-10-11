@@ -15,7 +15,7 @@ This blog is an introduction to the Internet of Things (IoT), and will cover the
 
 Overview
 ========
-As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how-to deploy these. The Internet of Things landscape is riddled with commercial companies that want to gather as much data as they can, while I think a library thrives on privacy. My advise for any library that want's to deploy a massive IoT setup, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
+As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how-to deploy these. The Internet of Things landscape is riddled with commercial companies that want to gather as much data as they can, while I think a library thrives on privacy. My advice for any library that want's to deploy a massive IoT setup, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
 During lockdown I had time to experiment with a lot of (bare-bone) IoT devices, and I will share my IoT setup here.
 
 <img src="https://s3.eu-central-1.amazonaws.com/centaur-wp/econsultancy/prod/content/uploads/archive/images/resized/0008/6869/atlas_bjsmcfal_2x-blog-flyer.png" alt="Cost of sensors">
@@ -42,17 +42,12 @@ For the home user a lot of stuff sold as IoT works out of the box, setup-procedu
 Let's get technical
 ===================
 There are a lot of good resources on the Internet about how-to setup your own IoT landscape, so making the right choices is important.
-My weapon of choice for setting thins up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/) or how-to hookup IoT to the cloud.
+My weapon of choice for setting things up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/), [HomeAassistant](https://www.home-assistant.io/) or how-to hookup IoT to the cloud.
 
 Last warning, this a very DIY!
 
 For microcontrollers there is a special Python distribution available for playing with these devices, MicroPython.
-I highly recommend this book:
-
-- Programming with MicroPython,
-- Embedded programming with microcontrollers & Python
-- Nicholas H. Tollervey
-- ISBN: 978-1-491-97273-1
+I highly recommend this book: [Programming with MicroPython, embedded programming with microcontrollers & Python by Nicholas H. Tollervey](https://www.worldcat.org/title/programming-with-micropython-embedded-programming-with-microcontrollers-and-python/oclc/1005138780)
 
 Now that we've defined our programming language let's talk hardware, and how you could setup your IoT experiments.
 
@@ -60,17 +55,19 @@ The general idea here is this:
 
 Sensor -> Microcontroller -> Raspberry Pi
 
-In this setup your sensor is allways able to talk to the microcontroller, if you hookup sensors to your Raspberry Pi you might experience lags while accessing the data (If your Pi is for example running background processs, or an software update).
-Using the MicroPython distribution you are running the microcontroller dedicated in embedded (real-time) mode, this will ensure no lags will happen, there are no big background processes running on the controller. The ultrasonic range sensor I will use later on is not super stable, but using the microcontroller it will gain stability, and enable different ways of transmitting data.
+In this setup your sensor is always able to talk to the microcontroller, if you hookup sensors to your Raspberry Pi you might experience lags while accessing the data (If your Pi is for example running background processs, or an software update).
+Using the MicroPython distribution you are running the microcontroller dedicated in embedded [real-time](https://en.wikipedia.org/wiki/Real-time_operating_system) mode, this will ensure no lags will happen, there are no big background processes running on the controller. The ultrasonic range sensor I will use later on is not super stable, and during testing I noticed that connecting a ultrasonic range sensor directly to the Raspberry Pi resulted in a lot of false measurements, this is due to the lack of a real-time kernel. In embedded systems the kernel is designed to maintain low latency, consistent response time, and determinism. The Raspberry Pi operating system is not designed for this, thus resulting in false measurements. Using a microcontroller to handle the sensor data ensures the data accuracy and improves stability of the system. The microcontroller also offers more flexibility in the way it transmits data upstream.
 
 Sensors
 =======
 Let's start with the sensor part. There are a lot of things you can measure with sensors, ranging from simple switches to water-levels, radar sensors, CO2 sensors etc.
 
 To explore a wide range of possibilities I suggest getting a sensor-kit, something like this:
-![Sensor kit example](https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/sensor-kit.jpg)  
+![Sensor kit example](https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/sensor-kit.jpg)
 
-Most of these sensor have been tested with MicroPython and tutorials on how-to connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
+Available via retailers, for example [AliExpress](https://www.aliexpress.com/item/1005002286940374.html) or [DealExtreme](https://www.dx.com/p/arduno-37-in-1-sensor-module-kit-black-2016490.html).
+
+Most of these sensor have been tested with MicroPython and tutorials on how-to connect and operate these are widely available, as well as source code. MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
 In order to attach the sensors to a ESP8266 you will need some wire, I recommend getting some [DuPont wire](https://en.wikipedia.org/wiki/Jump_wire) (Female to Female).
 
 Many kind of sensors sense the real-world and send digital information right back to the microcontroller. In order to make sense of what the sensor is measuring often a calculation step is needed, or some logic to enhance what the sensor is reporting back to the Raspberry Pi. Most (basic) sensors require three wires running from the microcontroller to the sensor, these are power, ground and a data-line (sensor output).
@@ -92,9 +89,9 @@ According to Wikipedia:
 
 There are several ways of communicating with the microcontroller, once deployed.
 
-- Scenario 1) Via serial communication using the USB-connection.
-- Scenario 2) Via Wi-Fi.
-- Scenario 3) By other means, like the SPI, GSM, LORA (Not covered in this blog).
+- Via serial communication using the USB-connection.
+- Via Wi-Fi.
+- By other means, like SPI, GSM, LORA, Bluetooth, ect. (Not covered in this blog).
 
 The first step is to erase and flash new firmware onto the ESP8266 device. Firmware is the software that runs on the microcontroller once it is powered, and it's called firmware because you are not able to modify it once written to the chip without interrupting the whole system.
 
@@ -174,8 +171,8 @@ picocom --baud 115200 /dev/ttyUSB0 # This will create a connection to your ESP, 
 ```
 Whenever you can't get readings from your ESP8266, don't hesitate to flash it again.
 
-Scenario 1
-----------
+USB
+---
 Using the serial connection you will be able te transfer data very reliable, but not as fast as over Wi-Fi (2.7 mega bits/sec) according to this [load tesing an esp8266](https://arunoda.me/blog/load-testing-an-esp8266).
 But for low-latency and high reliability/security data transfer a serial connection works just fine, I've tested the Python library 'pyserial' to get readings directly from the USB-port (cable length <5M) and this works like a charm.
 
@@ -208,9 +205,9 @@ sta_if.active(False)
 ap_if = network.WLAN(network.AP_IF)
 ap_if.active(False)
 ```
-An AP is normally used to connect to, you can do nice things with this option, like update the firmware and run a web-server on the ESP8266, but for this blog I will not explore these scenario's.
+An AP is normally used to connect to, you can do nice things with this option, like update the firmware and run a web-server on the ESP8266, but for this blog I will not explore these scenarios.
 
-I prefer to let the ESP8266 send data, rather then having the Raspberry Pi poll all the ESP8266's deployed, so I recommend turning off the access point (Which will by default show up something like 'MicroPython-2884894' in your Wi-Fi network list).
+I prefer to let the ESP8266 send data, rather then having the Raspberry Pi poll all the ESP8266's deployed, so I recommend turning off the access point (which will by default show up something like 'MicroPython-2884894' in your Wi-Fi network list).
 In order to do this, the last 2 lines of the code-snippet above will have to run first, before starting the main loop, add them to the boot.py file.
 
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/range_schem.jpg" alt="Ultrasonic range sensor schematics">  
@@ -237,9 +234,9 @@ while True:
         pass
 ```
 
-Scenario 2
+Wi-Fi
 ----------
-The example below shows you how-to transer data from the ESP8266 to a [mosquitto](https://mosquitto.org/) server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol. The example measures the distance to an object using the a ultrasonic range sensor. To be able to run this, I will explain howto setup a Raspberry Pi as a IoT-gateway later in this blog.
+The example below shows you how-to transer data from the ESP8266 to a [mosquitto](https://mosquitto.org/) server using the [mqtt](https://en.wikipedia.org/wiki/MQTT) protocol. The example measures the distance to an object using the a ultrasonic range sensor. To be able to run this, I will explain howto setup a Raspberry Pi as a (WiFi) IoT-gateway later in this blog.
 
 ```
 from umqtt.simple import MQTTClient
@@ -322,19 +319,19 @@ The final setup will look something like the image shown below:
 
 The information gathered from the sensors will travels the opposite way like this:
 
-Scenario 1)  
+USB:
 POE-switch <- Network cable <- POE-splitter <- Raspberry Pi <- USB micro cable <- ESP8266 <- DuPont wire <- Sensors
 
-Scenario 2)  
-POE-switch <- Network cable <- POE-splitter <- Raspberry Pi ) Wi-Fi ( ESP8266 <- DuPont wire <- Sensors
+Wi-Fi:
+POE-switch <- Network cable <- POE-splitter <- Raspberry Pi ))) Wi-Fi ((( ESP8266 <- DuPont wire <- Sensors
 
 By creating a setup like this you will be able to separate all IoT related traffic from the rest of your network.
 The data will be processed on the Raspberry Pi, from your internal network you will only need access to the Raspberry Pi's web-interface to look at the stats generated by accumulating sensor data. You could also hookup a monitor directly to the Raspberry Pi and create a real-time display using something like [pygame](https://www.pygame.org/).
 
-Whilst many solutions I've studied on the Internet propagate the idea of exposing your microcontrollers directly to the Internet, I think this is a bad idea from a security and privacy standpoint. Sure it has some advantages, but they outweigh my concerns of getting hacked or data fed into some cloud infra. An other option I've seen is connecting a ESP8266 via Wi-Fi to a smartphone, which is as [dangerous](https://edwardsnowden.substack.com/p/ns-oh-god-how-is-this-legal) as it gets. The ESP8266 itself is a perfect tool for [deauthing](https://github.com/SpacehuhnTech/esp8266_deauther) Wi-Fi networks, but that's a subject on it's own.
+Whilst many solutions I've studied on the Internet propagate the idea of exposing your microcontrollers directly to the Internet, I think this is a bad idea from a security and privacy standpoint. Sure it has some advantages, but these are outweighed by my concerns of getting hacked or data fed into some cloud infra. An other option I've seen is connecting a ESP8266 via Wi-Fi to a smartphone, which is as [dangerous](https://edwardsnowden.substack.com/p/ns-oh-god-how-is-this-legal) as it gets. The ESP8266 itself is a perfect tool for [deauthing](https://github.com/SpacehuhnTech/esp8266_deauther) Wi-Fi networks, but that's a subject on it's own.
 
-Scenario 2
-----------
+Wi-Fi
+-----
 If you have many sensors and ESP8266 around a Wi-Fi access point is a great solution for connection all the devices.
 
 Use the following commands on the Raspberry Pi to turn it into an IoT access point / gateway:
@@ -412,10 +409,10 @@ Calibration
 -----------
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/calibration.png" alt="Calibration">
 
-For calibration I've used a little pygame interface, the ESP8266 are using a serial (scenario 1) connection in this example. Because in my setup two ultrasonic range sensors are aligned up, they will allways interfere (from picking up the wrong signals) and will spit out semi-random data, during calibration if a book is fetched, it will noise-cancel out the two interfering sensors. If we get a stable reading 8 times in a row, we will know the position of the book.
+For calibration I've used a little pygame interface, the ESP8266 are using a USB connection in this example. Because in my setup two ultrasonic range sensors are aligned up, they will allways interfere (from picking up the wrong signals) and will spit out semi-random data. During calibration if a book is fetched, it will noise-cancel out the two interfering sensors. If we get a stable reading 8 times in a row, we will know the position of the book.
 The position information on the book can later be used to trigger action's when the book is fetched from the shelf.
 
-[![Bookshelf calibration](https://res.cloudinary.com/marcomontalbano/image/upload/v1633427216/video_to_markdown/images/youtube--LTxu2Oq2EkE-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=89a0hAoJ-tA "Bookshelf calibration")
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/89a0hAoJ-tA" title="Bookshelf calibration" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 The code for calibration is available on [github](https://gist.github.com/WillemJan/1fb88f96bdcfa779284a10109c7a00e8).
 
@@ -456,6 +453,6 @@ Demo
 ----
 For the final demo I will use the same setup, and fetch books from the shelf, this allows me to show the metadata about the book I've fetched directly onto the screen. For text-to-speech I'm using [espeak](https://linuxhint.com/command-line-text-speech-apps-linux/), this makes your shelf very accessible for people with a visual handicap. You could get creative and display other stats then I did, like how many times was the book fetched, and reading time, or if you like play some music that goes well with the book you fetched.
 
-[![Interactive bookshelf final demo](https://res.cloudinary.com/marcomontalbano/image/upload/v1633705928/video_to_markdown/images/youtube--RG5OGHnliKw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/RG5OGHnliKw "Interactive bookshelf final demo")
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/RG5OGHnliKw" title="Interactive bookshelf final demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 The code for the interactive bookshelf is available on [github](https://gist.github.com/WillemJan/8f573fb24e80bf67629a93ce9c52c6db), share and enjoy!
