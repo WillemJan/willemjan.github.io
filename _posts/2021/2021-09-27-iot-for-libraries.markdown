@@ -51,11 +51,14 @@ I highly recommend this book:
 
 [Programming with MicroPython, embedded programming with microcontrollers & Python by Nicholas H. Tollervey](https://www.worldcat.org/title/programming-with-micropython-embedded-programming-with-microcontrollers-and-python/oclc/1005138780)
 
+<!-- Linkje misschien handiger dan zo'n lijst? -->
+
 Now that we've defined our programming language let's talk hardware, and how you could setup your IoT experiments.
 
 The general idea here is this:
 
 Sensor -> Microcontroller -> Raspberry Pi
+
 
 In this setup your sensor is allways able to talk to the microcontroller, if you hookup sensors to your Raspberry Pi you might experience lags while accessing the data (If your Pi is for example running background processs, or an software update).
 Using the MicroPython distribution you are running the microcontroller dedicated in embedded (real-time) mode, this will ensure no lags will happen, there are no big background processes running on the controller. The ultrasonic range sensor I will use later on is not super stable, but using the microcontroller it will gain stability, and enable different ways of transmitting data.
