@@ -424,7 +424,15 @@ Calibration
 For calibration I've used a little pygame interface, the ESP8266 are using a serial (scenario 1) connection in this example. Because in my setup two ultrasonic range sensors are aligned up, they will always interfere (from picking up the wrong signals) and will spit out semi-random data. During calibration if a book is fetched, it will noise-cancel out the two interfering sensors. If we get a stable reading 8 times in a row, we will know the position of the book.
 The position information on the book can later be used to trigger action's when the book is fetched from the shelf.
 
+<!--
+
 [![Bookshelf calibration](https://res.cloudinary.com/marcomontalbano/image/upload/v1633427216/video_to_markdown/images/youtube--LTxu2Oq2EkE-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=89a0hAoJ-tA "Bookshelf calibration")
+
+Zodra je op de video klikt verlaat je het blog, misschien beter standaard Youtube iframe gebruiken?
+
+-->
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/89a0hAoJ-tA" title="Bookshelf calibration" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 The code for calibration is available on [github](https://gist.github.com/WillemJan/1fb88f96bdcfa779284a10109c7a00e8).
 
@@ -465,6 +473,11 @@ Demo
 ----
 For the final demo I will use the same setup, and fetch books from the shelf, this allows me to show the metadata about the book I've fetched directly onto the screen. For text-to-speech I'm using [espeak](https://linuxhint.com/command-line-text-speech-apps-linux/), this makes your shelf very accessible for people with a visual handicap. You could get creative and display other stats then I did, like how many times was the book fetched, and reading time, or if you like play some music that goes well with the book you fetched.
 
+<!--
 [![Interactive bookshelf final demo](https://res.cloudinary.com/marcomontalbano/image/upload/v1633705928/video_to_markdown/images/youtube--RG5OGHnliKw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/RG5OGHnliKw "Interactive bookshelf final demo")
+
+-->
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/RG5OGHnliKw" title="Interactive bookshelf final demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 The code for the interactive bookshelf is available on [github](https://gist.github.com/WillemJan/8f573fb24e80bf67629a93ce9c52c6db), share and enjoy!
