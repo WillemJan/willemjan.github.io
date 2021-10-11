@@ -15,7 +15,7 @@ This blog is an introduction to the Internet of Things (IoT), and will cover the
 
 Overview
 ========
-As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how-to deploy these. The Internet of Things landscape is riddled with commercial companies that want to gather as much data as they can, while I think a library thrives on privacy. My advise for any library that want's to deploy a massive IoT setup, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
+As the cost of sensors are dropping dramatically (Despite recent COVID hickups) libraries should invest some time and general understanding on how-to deploy these. The Internet of Things landscape is riddled with commercial companies that want to gather as much data as they can, while I think a library thrives on privacy. My advice for any library that want's to deploy a massive IoT setup, please be transparent about it, involve your patrons, they have a right to know and might be interested in the subject as well.  
 During lockdown I had time to experiment with a lot of (bare-bone) IoT devices, and I will share my IoT setup here.
 
 <img src="https://s3.eu-central-1.amazonaws.com/centaur-wp/econsultancy/prod/content/uploads/archive/images/resized/0008/6869/atlas_bjsmcfal_2x-blog-flyer.png" alt="Cost of sensors">
