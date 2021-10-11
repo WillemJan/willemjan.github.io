@@ -61,7 +61,7 @@ Sensor -> Microcontroller -> Raspberry Pi
 
 <!-- Dit is wel heel summier, zou ik wat nader toelichten -->
 
-In this setup your sensor is always able to talk to the microcontroller, if you hookup sensors to your Raspberry Pi you might experience lags while accessing the data (If your Pi is for example running background processs, or an software update).
+In this setup your sensor is always able to talk to the microcontroller, if you hookup sensors to your Raspberry Pi you might experience lags while accessing the data (if your Pi is for example running background processs, or an software update).
 Using the MicroPython distribution you are running the microcontroller dedicated in embedded (real-time) mode, this will ensure no lags will happen, there are no big background processes running on the controller. The ultrasonic range sensor I will use later on is not super stable, but using the microcontroller it will gain stability, and enable different ways of transmitting data.
 
 Sensors
@@ -70,6 +70,9 @@ Let's start with the sensor part. There are a lot of things you can measure with
 
 To explore a wide range of possibilities I suggest getting a sensor-kit, something like this:
 ![Sensor kit example](https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/sensor-kit.jpg)  
+
+<!-- Misschien ook een paar linkjes opnemen, want voor een geinteresseerde lezer die niet bekend is
+met sensor kits kan waarschijnlijk niet zo veel met alleen een plaatje?  -->
 
 Most of these sensor have been tested with MicroPython and tutorials on how-to connect and operate these are widely available, as well as source code, and MicroPython itself has good online [documentation](https://docs.micropython.org/en/latest/).
 In order to attach the sensors to a ESP8266 you will need some wire, I recommend getting some [DuPont wire](https://en.wikipedia.org/wiki/Jump_wire) (Female to Female).
