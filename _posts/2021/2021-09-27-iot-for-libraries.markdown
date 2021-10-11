@@ -421,7 +421,7 @@ Calibration
 -----------
 <img src="https://raw.githubusercontent.com/WillemJan/willemjan.github.io/master/_posts/2021/calibration.png" alt="Calibration">
 
-For calibration I've used a little pygame interface, the ESP8266 are using a serial (scenario 1) connection in this example. Because in my setup two ultrasonic range sensors are aligned up, they will allways interfere (from picking up the wrong signals) and will spit out semi-random data, during calibration if a book is fetched, it will noise-cancel out the two interfering sensors. If we get a stable reading 8 times in a row, we will know the position of the book.
+For calibration I've used a little pygame interface, the ESP8266 are using a serial (scenario 1) connection in this example. Because in my setup two ultrasonic range sensors are aligned up, they will always interfere (from picking up the wrong signals) and will spit out semi-random data. During calibration if a book is fetched, it will noise-cancel out the two interfering sensors. If we get a stable reading 8 times in a row, we will know the position of the book.
 The position information on the book can later be used to trigger action's when the book is fetched from the shelf.
 
 [![Bookshelf calibration](https://res.cloudinary.com/marcomontalbano/image/upload/v1633427216/video_to_markdown/images/youtube--LTxu2Oq2EkE-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=89a0hAoJ-tA "Bookshelf calibration")
