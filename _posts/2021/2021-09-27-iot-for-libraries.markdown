@@ -42,7 +42,7 @@ For the home user a lot of stuff sold as IoT works out of the box, setup-procedu
 Let's get technical
 ===================
 There are a lot of good resources on the Internet about how-to setup your own IoT landscape, so making the right choices is important.
-My weapon of choice for setting thins up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/) or how-to hookup IoT to the cloud.
+My weapon of choice for setting things up is Python, for it's a very accessible programming language, also I like minimalistic solutions, so I won't touch upon big IoT projects like [NodeRed](https://nodered.org/) or how-to hookup IoT to the cloud.
 
 Last warning, this a very DIY!
 
