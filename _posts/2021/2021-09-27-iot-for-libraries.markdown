@@ -49,10 +49,7 @@ Last warning, this a very DIY!
 For microcontrollers there is a special Python distribution available for playing with these devices, MicroPython.
 I highly recommend this book:
 
-- Programming with MicroPython,
-- Embedded programming with microcontrollers & Python
-- Nicholas H. Tollervey
-- ISBN: 978-1-491-97273-1
+[Programming with MicroPython, embedded programming with microcontrollers & Python by Nicholas H. Tollervey](https://www.worldcat.org/title/programming-with-micropython-embedded-programming-with-microcontrollers-and-python/oclc/1005138780)
 
 Now that we've defined our programming language let's talk hardware, and how you could setup your IoT experiments.
 
