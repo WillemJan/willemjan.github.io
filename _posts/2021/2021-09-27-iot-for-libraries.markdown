@@ -217,7 +217,7 @@ sta_if.active(False)
 ap_if = network.WLAN(network.AP_IF)
 ap_if.active(False)
 ```
-An AP is normally used to connect to, you can do nice things with this option, like update the firmware and run a web-server on the ESP8266, but for this blog I will not explore these scenario's.
+An AP is normally used to connect to, you can do nice things with this option, like update the firmware and run a web-server on the ESP8266, but for this blog I will not explore these scenarios.
 
 I prefer to let the ESP8266 send data, rather then having the Raspberry Pi poll all the ESP8266's deployed, so I recommend turning off the access point (Which will by default show up something like 'MicroPython-2884894' in your Wi-Fi network list).
 In order to do this, the last 2 lines of the code-snippet above will have to run first, before starting the main loop, add them to the boot.py file.
